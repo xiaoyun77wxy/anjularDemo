@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://angular.cn/guide/cheatsheet -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Angular - 速查表</title>
+  <!--<base href="/">--><base href=".">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" type="image/x-icon" href="https://angular.cn/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://angular.cn/assets/images/favicons/favicon.ico">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-194x194.png" sizes="194x194">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://angular.cn/assets/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://angular.cn/assets/images/favicons/apple-touch-icon-144x144.png">
+
+  <!-- NOTE: These need to be kept in sync with `ngsw-manifest.json`. -->
+  <link href="./Angular - 速查表_files/Material_Icons.css" rel="stylesheet">
+  <link href="./Angular - 速查表_files/Droid_Sans_Mono.css" rel="stylesheet">
+  <link href="./Angular - 速查表_files/font-awesome.min.css" rel="stylesheet">
+  <!-- -->
+
+  <link rel="manifest" href="https://angular.cn/pwa-manifest.json">
+  <meta name="theme-color" content="#1976d2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+
+  <script async="" src="./Angular - 速查表_files/analytics.js.下载"></script><script>
+    // Dynamically, pre-emptively, add `noindex`, which will be removed when the doc is ready and valid
+    tag = document.createElement('meta'); tag.name = 'robots'; tag.content = 'noindex';
+    document.head.appendChild(tag);
+  </script>
+
+  <!-- Google Analytics -->
+  <script>
+  // Note this is a customised version of the GA tracking snippet
+  // See the comments below for more info
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;
+  ~i.name.indexOf('NG_DEFER_BOOTSTRAP')|| // only load library if not running e2e tests
+  m.parentNode.insertBefore(a,m)
+  })(window,document,'script','assets/js/analytics.js','ga');
+  </script>
+  <!-- End Google Analytics -->
+
+  <script>
+    // Report fatal errors to Google Analytics
+    window.onerror = function() {
+      ga('send', 'exception', {exDescription: formatError.apply(null, arguments), exFatal: true});
+
+      function formatError(msg, url, line, col, e) {
+        var stack;
+        msg = msg.replace(/^Error: /, '');
+        if (e) {
+          stack = e.stack
+              // strip the leading "Error: " from the stack trace
+              .replace(/^Error: /, '')
+              // strip the message from the stack trace, if present
+              .replace(msg + '\n', '')
+              // strip leading spaces
+              .replace(/^ +/gm, '')
+              // strip all leading "at " for each frame
+              .replace(/^at /gm, '')
+              // replace long urls with just the last segment: `filename:line:column`
+              .replace(/(?: \(|@)http.+\/([^/)]+)\)?(?:\n|$)/gm, '@$1\n')
+              // replace "eval code" in Edge
+              .replace(/ *\(eval code(:\d+:\d+)\)(?:\n|$)/gm, '@???$1\n')
+        } else {
+          line = line || '?';
+          col = col || '?';
+          stack = url + ':' + line + ':' + col;
+        }
+        return (msg + '\n' + stack).substr(0, 150);
+      }
+    };
+  </script>
+
+  <script>
+    if (window.document.documentMode) {
+      // polyfill IE11 in a blocking way
+      var s = document.createElement('script');
+      s.src = 'generated/ie-polyfills.min.js';
+      document.head.appendChild(s);
+    } else if (!Object.assign) {
+      // polyfill other non-evergreen browsers in a blocking way
+      var polyfillUrl = "https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find&flags=gated&unknown=polyfill";
+
+      // send a blocking XHR to fetch the polyfill
+      // then append it to the document so that its eval-ed synchronously
+      // this is required because the method used for IE is not reliable with other non-evergreen browsers
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", function() {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        var code = this.responseText;
+        s.appendChild(document.createTextNode(code));
+        document.head.appendChild(s);
+      });
+      xhr.open("GET", polyfillUrl, false);
+      xhr.send();
+    }
+  </script>
+
+  <script>
+    //load CE polyfill
+    //HACK: webpack's html plugin mangles the document.write calls if we don't trick it.
+
+    //load the ES5 shim for browsers with native CE support
+    function loadCustomElementsShim(){
+      document.write('<scri' + 'pt src="assets/js/native-shim.js"><' + '/script>');
+    }
+
+    //load the full custom elements polyfill for browsers without support
+    function loadCustomElementsPolyfill(){
+      document.write('<scri' + 'pt src="assets/js/custom-elements.min.js"><' + '/script>');
+    }
+    //detect if we have native CE support
+    if(!window.customElements){
+      loadCustomElementsPolyfill();
+    }
+    else {
+      loadCustomElementsShim();
+    }
+  </script><script src="./Angular - 速查表_files/native-shim.js.下载"></script>
+
+<link rel="stylesheet" href="./Angular - 速查表_files/styles.613b7c8de73e274bd4c6.css"><style>@media screen and (-ms-high-contrast:active){.mat-toolbar{outline:solid 1px}}.mat-toolbar-row,.mat-toolbar-single-row{display:flex;box-sizing:border-box;padding:0 16px;width:100%;flex-direction:row;align-items:center;white-space:nowrap}.mat-toolbar-multiple-rows{display:flex;box-sizing:border-box;flex-direction:column;width:100%}.mat-toolbar-multiple-rows{min-height:64px}.mat-toolbar-row,.mat-toolbar-single-row{height:64px}@media (max-width:599px){.mat-toolbar-multiple-rows{min-height:56px}.mat-toolbar-row,.mat-toolbar-single-row{height:56px}}</style><style>.mat-button,.mat-flat-button,.mat-icon-button,.mat-stroked-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible}.mat-button[disabled],.mat-flat-button[disabled],.mat-icon-button[disabled],.mat-stroked-button[disabled]{cursor:default}.mat-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-button.cdk-program-focused .mat-button-focus-overlay,.mat-flat-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-flat-button.cdk-program-focused .mat-button-focus-overlay,.mat-icon-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-icon-button.cdk-program-focused .mat-button-focus-overlay,.mat-stroked-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-stroked-button.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-button::-moz-focus-inner,.mat-flat-button::-moz-focus-inner,.mat-icon-button::-moz-focus-inner,.mat-stroked-button::-moz-focus-inner{border:0}.mat-button .mat-button-focus-overlay,.mat-icon-button .mat-button-focus-overlay{transition:none;opacity:0}.mat-button:hover .mat-button-focus-overlay,.mat-stroked-button:hover .mat-button-focus-overlay{opacity:1}.mat-raised-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible;transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}.mat-raised-button[disabled]{cursor:default}.mat-raised-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-raised-button.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-raised-button::-moz-focus-inner{border:0}.mat-raised-button:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-raised-button:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}.mat-raised-button[disabled]{box-shadow:none}.mat-stroked-button{border:1px solid currentColor;padding:0 15px;line-height:34px}.mat-stroked-button:not([class*=mat-elevation-z]){box-shadow:0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12)}.mat-flat-button:not([class*=mat-elevation-z]){box-shadow:0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12)}.mat-fab{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible;transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}.mat-fab[disabled]{cursor:default}.mat-fab.cdk-keyboard-focused .mat-button-focus-overlay,.mat-fab.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-fab::-moz-focus-inner{border:0}.mat-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}.mat-fab[disabled]{box-shadow:none}.mat-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.mat-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-fab .mat-button-wrapper{padding:16px 0;display:inline-block;line-height:24px}.mat-mini-fab{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible;transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}.mat-mini-fab[disabled]{cursor:default}.mat-mini-fab.cdk-keyboard-focused .mat-button-focus-overlay,.mat-mini-fab.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-mini-fab::-moz-focus-inner{border:0}.mat-mini-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-mini-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}.mat-mini-fab[disabled]{box-shadow:none}.mat-mini-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.mat-mini-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-mini-fab .mat-button-wrapper{padding:8px 0;display:inline-block;line-height:24px}.mat-icon-button{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}.mat-icon-button .mat-icon,.mat-icon-button i{line-height:24px}.mat-button-focus-overlay,.mat-button-ripple{top:0;left:0;right:0;bottom:0;position:absolute;pointer-events:none}.mat-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;opacity:0;transition:opacity .2s cubic-bezier(.35,0,.25,1),background-color .2s cubic-bezier(.35,0,.25,1)}@media screen and (-ms-high-contrast:active){.mat-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.mat-button-ripple-round{border-radius:50%;z-index:1}.mat-button .mat-button-wrapper>*,.mat-fab .mat-button-wrapper>*,.mat-flat-button .mat-button-wrapper>*,.mat-icon-button .mat-button-wrapper>*,.mat-mini-fab .mat-button-wrapper>*,.mat-raised-button .mat-button-wrapper>*,.mat-stroked-button .mat-button-wrapper>*{vertical-align:middle}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{display:block;font-size:inherit;width:2.5em;height:2.5em}@media screen and (-ms-high-contrast:active){.mat-button,.mat-fab,.mat-flat-button,.mat-icon-button,.mat-mini-fab,.mat-raised-button{outline:solid 1px}}</style><style>.mat-icon{background-repeat:no-repeat;display:inline-block;fill:currentColor;height:24px;width:24px}.mat-icon.mat-icon-inline{font-size:inherit;height:inherit;line-height:inherit;width:inherit}[dir=rtl] .mat-icon-rtl-mirror{transform:scale(-1,1)}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon{display:block}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button .mat-icon,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button .mat-icon{margin:auto}</style><style>.mat-drawer-container{position:relative;z-index:1;box-sizing:border-box;-webkit-overflow-scrolling:touch;display:block;overflow:hidden}.mat-drawer-container[fullscreen]{top:0;left:0;right:0;bottom:0;position:absolute}.mat-drawer-container[fullscreen].mat-drawer-opened{overflow:hidden}.mat-drawer-container.mat-drawer-container-explicit-backdrop .mat-drawer-side{z-index:3}.mat-drawer-backdrop{top:0;left:0;right:0;bottom:0;position:absolute;display:block;z-index:3;visibility:hidden}.mat-drawer-backdrop.mat-drawer-shown{visibility:visible}.mat-drawer-transition .mat-drawer-backdrop{transition-duration:.4s;transition-timing-function:cubic-bezier(.25,.8,.25,1);transition-property:background-color,visibility}@media screen and (-ms-high-contrast:active){.mat-drawer-backdrop{opacity:.5}}.mat-drawer-content{position:relative;z-index:1;display:block;height:100%;overflow:auto}.mat-drawer-transition .mat-drawer-content{transition-duration:.4s;transition-timing-function:cubic-bezier(.25,.8,.25,1);transition-property:transform,margin-left,margin-right}.mat-drawer{position:relative;z-index:4;display:block;position:absolute;top:0;bottom:0;z-index:3;outline:0;box-sizing:border-box;overflow-y:auto;transform:translate3d(-100%,0,0)}@media screen and (-ms-high-contrast:active){.mat-drawer,[dir=rtl] .mat-drawer.mat-drawer-end{border-right:solid 1px currentColor}}@media screen and (-ms-high-contrast:active){.mat-drawer.mat-drawer-end,[dir=rtl] .mat-drawer{border-left:solid 1px currentColor;border-right:none}}.mat-drawer.mat-drawer-side{z-index:2}.mat-drawer.mat-drawer-end{right:0;transform:translate3d(100%,0,0)}[dir=rtl] .mat-drawer{transform:translate3d(100%,0,0)}[dir=rtl] .mat-drawer.mat-drawer-end{left:0;right:auto;transform:translate3d(-100%,0,0)}.mat-drawer:not(.mat-drawer-side){box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12)}.mat-sidenav-fixed{position:fixed}</style><script charset="utf-8" src="./Angular - 速查表_files/current-location-current-location-module-ngfactory.f94bfe4754b66577c07b.js.下载"></script><style>.mat-progress-bar{display:block;height:5px;overflow:hidden;position:relative;transition:opacity 250ms linear;width:100%}.mat-progress-bar .mat-progress-bar-element,.mat-progress-bar .mat-progress-bar-fill::after{height:100%;position:absolute;width:100%}.mat-progress-bar .mat-progress-bar-background{width:calc(100% + 10px)}.mat-progress-bar .mat-progress-bar-buffer{transform-origin:top left;transition:transform 250ms ease}.mat-progress-bar .mat-progress-bar-secondary{display:none}.mat-progress-bar .mat-progress-bar-fill{animation:none;transform-origin:top left;transition:transform 250ms ease}.mat-progress-bar .mat-progress-bar-fill::after{animation:none;content:'';display:inline-block;left:0}.mat-progress-bar[dir=rtl],[dir=rtl] .mat-progress-bar{transform:rotateY(180deg)}.mat-progress-bar[mode=query]{transform:rotateZ(180deg)}.mat-progress-bar[mode=query][dir=rtl],[dir=rtl] .mat-progress-bar[mode=query]{transform:rotateZ(180deg) rotateY(180deg)}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-fill,.mat-progress-bar[mode=query] .mat-progress-bar-fill{transition:none}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-primary,.mat-progress-bar[mode=query] .mat-progress-bar-primary{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-primary-indeterminate-translate 2s infinite linear;left:-145.166611%}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-primary.mat-progress-bar-fill::after,.mat-progress-bar[mode=query] .mat-progress-bar-primary.mat-progress-bar-fill::after{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-primary-indeterminate-scale 2s infinite linear}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-secondary,.mat-progress-bar[mode=query] .mat-progress-bar-secondary{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-secondary-indeterminate-translate 2s infinite linear;left:-54.888891%;display:block}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-secondary.mat-progress-bar-fill::after,.mat-progress-bar[mode=query] .mat-progress-bar-secondary.mat-progress-bar-fill::after{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-secondary-indeterminate-scale 2s infinite linear}.mat-progress-bar[mode=buffer] .mat-progress-bar-background{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-background-scroll 250ms infinite linear}@keyframes mat-progress-bar-primary-indeterminate-translate{0%{transform:translateX(0)}20%{animation-timing-function:cubic-bezier(.5,0,.70173,.49582);transform:translateX(0)}59.15%{animation-timing-function:cubic-bezier(.30244,.38135,.55,.95635);transform:translateX(83.67142%)}100%{transform:translateX(200.61106%)}}@keyframes mat-progress-bar-primary-indeterminate-scale{0%{transform:scaleX(.08)}36.65%{animation-timing-function:cubic-bezier(.33473,.12482,.78584,1);transform:scaleX(.08)}69.15%{animation-timing-function:cubic-bezier(.06,.11,.6,1);transform:scaleX(.66148)}100%{transform:scaleX(.08)}}@keyframes mat-progress-bar-secondary-indeterminate-translate{0%{animation-timing-function:cubic-bezier(.15,0,.51506,.40969);transform:translateX(0)}25%{animation-timing-function:cubic-bezier(.31033,.28406,.8,.73371);transform:translateX(37.65191%)}48.35%{animation-timing-function:cubic-bezier(.4,.62704,.6,.90203);transform:translateX(84.38617%)}100%{transform:translateX(160.27778%)}}@keyframes mat-progress-bar-secondary-indeterminate-scale{0%{animation-timing-function:cubic-bezier(.15,0,.51506,.40969);transform:scaleX(.08)}19.15%{animation-timing-function:cubic-bezier(.31033,.28406,.8,.73371);transform:scaleX(.4571)}44.15%{animation-timing-function:cubic-bezier(.4,.62704,.6,.90203);transform:scaleX(.72796)}100%{transform:scaleX(.08)}}@keyframes mat-progress-bar-background-scroll{to{transform:translateX(-10px)}}</style><script charset="utf-8" src="./Angular - 速查表_files/code-code-example-module-ngfactory_code-code-tabs-module-ngfactory.6a5aabadc81dbdfa0f4e.js.下载"></script><script charset="utf-8" src="./Angular - 速查表_files/code-code-tabs-module-ngfactory.8315a94f020cd25fe92d.js.下载"></script><script charset="utf-8" src="./Angular - 速查表_files/code-code-example-module-ngfactory.d0ec50584c7428d1d6ed.js.下载"></script><script charset="utf-8" src="./Angular - 速查表_files/12.50857b4475720140b255.js.下载"></script><style>.mat-tab-group{display:flex;flex-direction:column}.mat-tab-group.mat-tab-group-inverted-header{flex-direction:column-reverse}.mat-tab-label{height:48px;padding:0 24px;cursor:pointer;box-sizing:border-box;opacity:.6;min-width:160px;text-align:center;display:inline-flex;justify-content:center;align-items:center;white-space:nowrap;position:relative}.mat-tab-label:focus{outline:0}.mat-tab-label:focus:not(.mat-tab-disabled){opacity:1}.mat-tab-label.mat-tab-disabled{cursor:default}.mat-tab-label.mat-tab-label-content{display:inline-flex;justify-content:center;align-items:center;white-space:nowrap}@media (max-width:599px){.mat-tab-label{padding:0 12px}}@media (max-width:959px){.mat-tab-label{padding:0 12px}}.mat-tab-group[mat-stretch-tabs] .mat-tab-label{flex-basis:0;flex-grow:1}.mat-tab-body-wrapper{position:relative;overflow:hidden;display:flex;transition:height .5s cubic-bezier(.35,0,.25,1)}.mat-tab-body{top:0;left:0;right:0;bottom:0;position:absolute;display:block;overflow:hidden;flex-basis:100%}.mat-tab-body.mat-tab-body-active{position:relative;overflow-x:hidden;overflow-y:auto;z-index:1;flex-grow:1}.mat-tab-group.mat-tab-group-dynamic-height .mat-tab-body.mat-tab-body-active{overflow-y:hidden}</style><style>.mat-tab-header{display:flex;overflow:hidden;position:relative;flex-shrink:0}.mat-tab-label{height:48px;padding:0 24px;cursor:pointer;box-sizing:border-box;opacity:.6;min-width:160px;text-align:center;display:inline-flex;justify-content:center;align-items:center;white-space:nowrap;position:relative}.mat-tab-label:focus{outline:0}.mat-tab-label:focus:not(.mat-tab-disabled){opacity:1}.mat-tab-label.mat-tab-disabled{cursor:default}.mat-tab-label.mat-tab-label-content{display:inline-flex;justify-content:center;align-items:center;white-space:nowrap}@media (max-width:599px){.mat-tab-label{min-width:72px}}.mat-ink-bar{position:absolute;bottom:0;height:2px;transition:.5s cubic-bezier(.35,0,.25,1)}.mat-tab-group-inverted-header .mat-ink-bar{bottom:auto;top:0}@media screen and (-ms-high-contrast:active){.mat-ink-bar{outline:solid 2px;height:0}}.mat-tab-header-pagination{position:relative;display:none;justify-content:center;align-items:center;min-width:32px;cursor:pointer;z-index:2}.mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{display:flex}.mat-tab-header-pagination-before,.mat-tab-header-rtl .mat-tab-header-pagination-after{padding-left:4px}.mat-tab-header-pagination-before .mat-tab-header-pagination-chevron,.mat-tab-header-rtl .mat-tab-header-pagination-after .mat-tab-header-pagination-chevron{transform:rotate(-135deg)}.mat-tab-header-pagination-after,.mat-tab-header-rtl .mat-tab-header-pagination-before{padding-right:4px}.mat-tab-header-pagination-after .mat-tab-header-pagination-chevron,.mat-tab-header-rtl .mat-tab-header-pagination-before .mat-tab-header-pagination-chevron{transform:rotate(45deg)}.mat-tab-header-pagination-chevron{border-style:solid;border-width:2px 2px 0 0;content:'';height:8px;width:8px}.mat-tab-header-pagination-disabled{box-shadow:none;cursor:default}.mat-tab-label-container{display:flex;flex-grow:1;overflow:hidden;z-index:1}.mat-tab-list{flex-grow:1;position:relative;transition:transform .5s cubic-bezier(.35,0,.25,1)}.mat-tab-labels{display:flex}</style><style>.mat-tab-body-content{height:100%;overflow:auto}.mat-tab-group-dynamic-height .mat-tab-body-content{overflow:hidden}</style><script charset="utf-8" src="./Angular - 速查表_files/live-example-live-example-module-ngfactory.76888e8a441aab262101.js.下载"></script></head>
+<body>
+
+  <aio-shell ng-version="6.0.0" class="mode-stable sidenav-open page-guide-cheatsheet folder-guide view-SideNav aio-notification-hide "><div id="top-of-page"></div><!----><mat-toolbar class="app-toolbar no-print mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary"><mat-toolbar-row class="notification-container mat-toolbar-row"><aio-notification actionurl="https://bit.ly/angular-survey-2018" buttontext="Go to survey" expirationdate="2018-01-19" icon="insert_comment" iconlabel="Survey" notificationid="survey-january-2018" class="ng-tns-c2-0 ng-trigger ng-trigger-hideAnimation" style="height: 0px;"><a class="content" href="https://bit.ly/angular-survey-2018"><mat-icon class="icon mat-icon" role="img" aria-hidden="true" aria-label="Survey"><svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></mat-icon><span class="message"> Help Angular by taking a <b>1 minute survey</b>! </span><span class="action-button">Go to survey</span></a><button class="close-button mat-icon-button" aria-label="Close" mat-icon-button=""><span class="mat-button-wrapper"><mat-icon aria-label="Dismiss notification" class="mat-icon ng-tns-c2-0" role="img" svgicon="close" aria-hidden="true"><svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></mat-icon></span><div class="mat-button-ripple mat-ripple mat-button-ripple-round" matripple=""></div><div class="mat-button-focus-overlay"></div></button></aio-notification></mat-toolbar-row><mat-toolbar-row class="mat-toolbar-row"><button class="hamburger mat-button" mat-button="" title="Docs menu"><span class="mat-button-wrapper"><mat-icon class="mat-icon" role="img" svgicon="menu" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></mat-icon></span><div class="mat-button-ripple mat-ripple" matripple=""></div><div class="mat-button-focus-overlay"></div></button><a class="nav-link home" href="https://angular.cn/"><!----><img alt="Home" height="40" src="./Angular - 速查表_files/logo-nav@2x.png" title="Home" width="150" class="ng-star-inserted"><!----></a><!----><aio-top-menu class="ng-star-inserted"><ul role="navigation"><!----><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/features" title="特性">特性</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/docs" title="文档">文档</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/resources" title="资源">资源</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/events" title="会议">会议</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://blog.angular.io/" title="博客">博客</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/translations/cn/home" title="关于中文版">关于中文版</a></li></ul></aio-top-menu><aio-search-box class="search-container"><input aria-label="search" placeholder="搜索" type="search"></aio-search-box></mat-toolbar-row></mat-toolbar><!----><mat-sidenav-container class="sidenav-container mat-drawer-container mat-sidenav-container mat-drawer-transition" role="main"><!----><div class="mat-drawer-backdrop ng-star-inserted"></div><div tabindex="-1" class="cdk-visually-hidden cdk-focus-trap-anchor"></div><mat-sidenav class="sidenav mat-drawer mat-sidenav ng-tns-c6-1 ng-trigger ng-trigger-transform mat-drawer-side ng-star-inserted" tabindex="-1" style="transform: translate3d(0px, 0px, 0px); visibility: visible;"><!----><aio-nav-menu><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-1 collapsed" href="https://angular.cn/guide/quickstart" title="Angular 破冰"> 快速上手 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-1 collapsed" type="button" title="此《英雄指南》教程会带你用 TypeScript 一步步创建一个 Angular 应用。" aria-pressed="false"> 教程 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-1 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial" title="第一部分：《英雄指南》教程简介"> 1. 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt0" title="第二部分：创建应用的外壳"> 2. 应用的“外壳” </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt1" title="第三部分：构建一个简单的英雄编辑器"> 3. 英雄编辑器 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt2" title="第四部分：构建一个主从结构的页面，用于展现英雄列表"> 4. 显示英雄列表 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt3" title="第五部分：把主从结构的页面重构成多个组件"> 5. 主从组件 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt4" title="第六部分：创建一个可复用的服务来管理英雄数据"> 6. 服务 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt5" title="第七部分：添加 Angular 路由器，并且学习在视图之间导航"> 7. 路由 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt6" title="第八部分：通过 HTTP 来获取并保存英雄数据"> 8. HTTP </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-1 expanded selected" type="button" title="学习 Angular 的核心知识" aria-pressed="true"> 核心知识 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-1 expanded selected"><!----><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 应用的基本构造块。" aria-pressed="false"> 架构 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture" title="Angular 应用的基本构造块"> 架构概览 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-modules" title="关于模块。"> 模块（NgModule）简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-components" title="关于组件、模板和视图。"> 组件简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-services" title="关于服务与依赖注入。"> 服务与 DI 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-next-steps" title="学完基础知识之后……"> 后续步骤 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="使用数据绑定构建动态视图" aria-pressed="false"> 组件与模板 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/displaying-data" title="属性绑定可以帮助应用把数据显示在界面上"> 显示数据 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/template-syntax" title="学习如何写模板，以便借助数据绑定机制显示数据并响应事件。"> 模板语法 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/lifecycle-hooks" title="Angular 调用指令和组件的生命周期钩子函数，包括它的创建、变更和销毁时。"> 生命周期钩子 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/component-interaction" title="在不同的指令和组件之间共享信息"> 组件交互 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/component-styles" title="添加专属于某个组件的样式"> 组件样式 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/elements" title="把组件转换成自定义元素。"> Angular 自定义元素 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dynamic-component-loader" title="动态加载组件"> 动态组件 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/attribute-directives" title="属性型指令把行为添加到现有元素上。"> 属性型指令 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/structural-directives" title="结构型指令可以操纵页面的布局"> 结构型指令 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/pipes" title="管道可以在模板中转换显示的内容。"> 管道 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/animations" title="Angular 动画体系指南"> 动画 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 的表单" aria-pressed="false"> 表单 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/user-input" title="用户输入触发 DOM 事件。我们通过事件绑定来监听它们，把更新过的数据导入回我们的组件和 model。"> 用户输入 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/forms" title="表单可以创建集中、高效、引人注目的输入体验。Angular 表单可以协调一组数据绑定控件，跟踪变更，验证输入，并表达错误信息。"> 模板驱动表单 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/form-validation" title="验证用户的表单输入"> 表单验证 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/reactive-forms" title="使用 FormBuilder 、分组和数组创建响应式表单。"> 响应式表单 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dynamic-form" title="使用FormGroup渲染动态表单"> 动态表单 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Observable 与 RxJS" aria-pressed="false"> Observable 与 RxJS <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/observables" title=""> 可观察对象(Observable) </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/rx-library" title=""> RxJS 库 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/observables-in-angular" title=""> Angular 中的可观察对象 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/practical-observable-usage" title=""> 用法实战 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/comparing-observables" title=""> 与其它技术的比较 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/bootstrapping" title="在应用的根模块（AppModule）中告诉 Angular 如何构造并引导引用。"> 引导启动 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 expanded" type="button" title="Angular 中的模块" aria-pressed="true"> Angular 模块 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 expanded"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/ngmodules" title="使用 NgModule 让你的应用更高效"> NgModule 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/ngmodule-vs-jsmodule" title="JavaScript 模块和 NgModule 之间的差异"> JS 模块 vs NgModule </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/frequent-ngmodules" title="介绍最常用的 Angular 模块"> 常用模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/module-types" title="介绍特性模块的几种类型"> 特性模块的分类 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/entry-components" title="关于 Angular 中入口组件的一切"> 入口组件 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/feature-modules" title="创建特性模块，以组织你的代码"> 特性模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/providers" title="服务提供商与 Angular 模块"> 服务提供商 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/singleton-services" title="创建单例应用"> 单例应用 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/lazy-loading-ngmodules" title="惰性加载模块，以提高应用的性能"> 惰性加载的特性模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/sharing-ngmodules" title="共享 Angular 模块让你的应用现代化。"> 共享 Angular 模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/ngmodule-api" title="理解 NgModule 的那些细节。"> NgModule API </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 expanded" href="https://angular.cn/guide/ngmodule-faq" title="回答关于 NgModules 的常见问题。"> NgModule 常见问题 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="依赖注入：创建并注入各种服务。" aria-pressed="false"> 依赖注入 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dependency-injection-pattern" title="学习 Angular 依赖注入系统背后的依赖注入模式"> 依赖注入模式 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dependency-injection" title="Angular 的依赖注入系统能够为 Angular 创建的类创建并交付它们所依赖的服务。"> Angular 依赖注入 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/hierarchical-dependency-injection" title="Angular 的多级注入体系会建立与组件平行的注入器树。"> 多级注入器 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dependency-injection-in-action" title="依赖注入的使用技巧"> DI 实用技巧 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/guide/http" title="通过 HTTP 协议与远程服务器对话。"> HttpClient </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/guide/router" title="揭示如何通过 Angular 路由进行基本的屏幕导航。"> 路由与导航 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/guide/testing" title="测试 Angular 应用的技巧与实践。"> 测试 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded selected" href="https://angular.cn/guide/cheatsheet" title="关于 Angular 常用编码技术的快速指南。"> 速查表 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-1 collapsed" type="button" title="把 Angular 用到你的实际工作中的一些技巧" aria-pressed="false"> 其它技术 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-1 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/i18n" title="把应用模板中的文本翻译成多种语言。"> 国际化 (i18n) </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/language-service" title="使用 Angular 语言服务来为开发提速。"> 语言服务 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/security" title="Angular 应用开发中的安全技术。"> 安全 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="环境准备与部署" aria-pressed="false"> 环境准备与部署 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/setup" title="在你自己的机器上安装 Angular QuickStart 种子，以便更快、更高效的开发。"> 搭建本地开发环境 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/setup-systemjs-anatomy" title="基于 SystemJS 的本地开发环境内幕。"> 搭建方式剖析 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/browser-support" title="浏览器支持与 Polyfills 指南"> 浏览器支持 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/npm-packages" title="建议的 npm 包，以及如何指定包的依赖。"> npm 包 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/typescript-configuration" title="给 Angular 开发者的 TypeScript 配置。"> TypeScript 配置 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/aot-compiler" title="学习如何使用 AOT 预编译器。"> 预先（AOT）编译 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/deployment" title="学习如何部署你的 Angular 应用。"> 部署 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/custom-elements" title="把 Angular 组件用作自定义元素。"> 自定义元素 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 的 Service Worker：控制应用的资源缓存。" aria-pressed="false"> Service Worker <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-intro" title="Angular 对 Service Worker 的实现提升了慢速或不稳定的网络连接下的用户体验。"> 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-getting-started" title="在 CLI 项目中启用 Service Worker，并在浏览器中查看效果。"> 快速起步 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-communications" title="那些能让你和 Angular 的 Service Worker 通讯的服务类。"> 与 Service Worker 通讯 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-devops" title="使用 Service Worker 运行应用、管理应用更新、调试以及杀掉正在运行的应用。"> 生产环境下的 Service Worker </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-config" title="配置 Service Worker 的缓存行为。"> Service Worker 配置 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 的发布实践，更新计划以及与更新有关的资源。" aria-pressed="false"> 保持最新 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/updating" title="关于如何把 Angular 应用升级到最新版的信息。"> 更新你的项目 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/releases" title="Angular 的版本、发布、支持与弃用策略。"> Angular 的版本发布 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="把 AngularJS 应用增量式的升级到 Angular。" aria-pressed="false"> 从 AngularJS 升级 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/upgrade" title="把 AngularJS 应用增量式的升级到 Angular。"> 升级步骤 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/ajs-quick-reference" title="学习如何把 AngularJS 的概念映射到 Angular 中。"> AngularJS 与 Angular 的概念对照 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/universal" title="使用 Angular Universal 在服务端渲染 HTML。">  服务端渲染 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/visual-studio-2015" title="在 Visual Studio 2015 中使用快速起步中的文件"> Visual Studio 2015 快速上手 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/styleguide" title="写出 Angular 风格的程序"> 风格指南 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/glossary" title="Angular 中最重要的词汇的简要定义。"> 词汇表 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-1 collapsed" href="https://angular.cn/api" title="关于 Angular 中类和值的详细信息。"> API 参考手册 </a></div><!----></aio-nav-item></aio-nav-menu><div class="doc-version"><aio-select><div class="form-select-menu"><button class="form-select-button"><strong></strong><!---->stable (v6.0.0) </button><!----></div></aio-select></div></mat-sidenav><div tabindex="-1" class="cdk-visually-hidden cdk-focus-trap-anchor"></div><!----><mat-sidenav-content cdkscrollable="" class="mat-drawer-content mat-sidenav-content ng-star-inserted" style="margin-left: 262px; margin-right: 0px;"><section class="sidenav-content" role="content" id="guide-cheatsheet"><aio-mode-banner><!----></aio-mode-banner><aio-doc-viewer class=""><div style="opacity: 1; transition: all 200ms ease-in-out;">
+<div class="content">
+<h1 translation-result="" class="no-toc" id="cheat-sheet">速查表<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/guide/cheatsheet#cheat-sheet"><i class="material-icons">link</i></a></h1><h1 translation-origin="off" class="no-toc" id="cheat-sheet">Cheat Sheet<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/guide/cheatsheet#cheat-sheet"><i class="material-icons">link</i></a></h1>
+
+<div id="cheatsheet">
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    引导/启动</p><p translation-origin="off">    Bootstrapping</p>
+
+</th>
+<th>
+    <p translation-origin="off"><code>import { <a href="https://angular.cn/api/platform-browser-dynamic/platformBrowserDynamic" class="code-anchor">platformBrowserDynamic</a> } from '@angular/platform-browser-dynamic';</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code><b><a href="https://angular.cn/api/platform-browser-dynamic/platformBrowserDynamic" class="code-anchor">platformBrowserDynamic</a>().bootstrapModule</b>(AppModule);</code></p>
+</td>
+<td>
+    <p translation-result="">用 <code><a href="https://angular.cn/api/core/NgModule" class="code-anchor">NgModule</a></code> 中指定的根组件进行启动。</p><p translation-origin="off">Bootstraps the app, using the root component from the specified <code><a href="https://angular.cn/api/core/NgModule" class="code-anchor">NgModule</a></code>. </p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-origin="off">    NgModules</p>
+</th>
+<th>
+    <p translation-origin="off"><code>import { <a href="https://angular.cn/api/core/NgModule" class="code-anchor">NgModule</a> } from '@angular/core';</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code>@<b><a href="https://angular.cn/api/core/NgModule" class="code-anchor">NgModule</a></b>({ declarations: ..., imports: ...,<br>     exports: ..., providers: ..., bootstrap: ...})<br>class MyModule {}</code></p>
+</td>
+<td>
+    <p translation-result="">定义一个模块，其中可以包含组件、指令、管道和服务提供商。</p><p translation-origin="off">Defines a module that contains components, directives, pipes, and providers.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>declarations:</b> [MyRedComponent, MyBlueComponent, MyDatePipe]</code></p>
+</td>
+<td>
+    <p translation-result="">属于当前模块的组件、指令和管道的列表。</p><p translation-origin="off">List of components, directives, and pipes that belong to this module.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>imports:</b> [<a href="https://angular.cn/api/platform-browser/BrowserModule" class="code-anchor">BrowserModule</a>, SomeOtherModule]</code></p>
+</td>
+<td>
+    <p translation-result="">本模块所导入的模块列表</p><p translation-origin="off">List of modules to import into this module. Everything from the imported modules
+is available to <code>declarations</code> of this module.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>exports:</b> [MyRedComponent, MyDatePipe]</code></p>
+</td>
+<td>
+    <p translation-result="">那些导入了本模块的模块所能看到的组件、指令和管道的列表</p><p translation-origin="off">List of components, directives, and pipes visible to modules that import this module.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>providers:</b> [MyService, { provide: ... }]</code></p>
+</td>
+<td>
+    <p translation-result="">依赖注入提供商的列表，本模块以及本模块导入的所有模块中的内容都可以看见它们。</p><p translation-origin="off">List of dependency injection providers visible both to the contents of this module and to importers of this module.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>bootstrap:</b> [MyAppComponent]</code></p>
+</td>
+<td>
+    <p translation-result="">当本模块启动时，随之启动的组件列表。</p><p translation-origin="off">List of components to bootstrap when this module is bootstrapped.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    模板语法</p><p translation-origin="off">    Template syntax</p>
+
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code>&lt;input <b>[value]</b>="firstName"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">把<code>value</code>属性绑定到表达式<code>firstName</code></p><p translation-origin="off">Binds property <code>value</code> to the result of expression <code>firstName</code>.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;div <b>[attr.role]</b>="myAriaRole"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">把属性（Attribute）<code>role</code>绑定到表达式<code>myAriaRole</code>的结果。</p><p translation-origin="off">Binds attribute <code>role</code> to the result of expression <code>myAriaRole</code>.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;div <b>[class.extra-sparkle]</b>="isDelightful"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">根据<code>isDelightful</code>表达式的结果是否为真，决定 CSS 类<code>extra-sparkle</code>是否出现在当前元素上。</p><p translation-origin="off">Binds the presence of the CSS class <code>extra-sparkle</code> on the element to the truthiness of the expression <code>isDelightful</code>.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;div <b>[style.width.px]</b>="mySize"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">把 CSS 样式属性<code>width</code>的 px（像素）值绑定到表达式<code>mySize</code>的结果。单位是可选的。</p><p translation-origin="off">Binds style property <code>width</code> to the result of expression <code>mySize</code> in pixels. Units are optional.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;button <b>(click)</b>="readRainbow($event)"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">当这个按钮元素（及其子元素）上的 click 事件触发时，调用方法<code>readRainbow</code>，并把这个事件对象作为参数传进去。</p><p translation-origin="off">Calls method <code>readRainbow</code> when a click event is triggered on this button element (or its children) and passes in the event object.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;div title="Hello <b>{{ponyName}}</b>"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">把一个属性绑定到插值字符串（如"Hello Seabiscuit"）。这种写法等价于<code>&lt;div [title]="'Hello ' + ponyName"&gt;</code></p><p translation-origin="off">Binds a property to an interpolated string, for example, "Hello Seabiscuit". Equivalent to:
+<code>&lt;div [title]="'Hello ' + ponyName"&gt;</code></p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;p&gt;Hello <b>{{ponyName}}</b>&lt;/p&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">把文本内容绑定到插值字符串（如"Hello Seabiscuit"）</p><p translation-origin="off">Binds text content to an interpolated string, for example, "Hello Seabiscuit".</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;my-cmp <b>[(title)]</b>="name"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">设置双向绑定。等价于<code>&lt;my-cmp [title]="name" (titleChange)="name=$event"&gt;</code>。</p><p translation-origin="off">Sets up two-way data binding. Equivalent to: <code>&lt;my-cmp [title]="name" (titleChange)="name=$event"&gt;</code></p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;video <b>#movieplayer</b> ...&gt;<br>  &lt;button <b>(click)</b>="movieplayer.play()"&gt;<br>&lt;/video&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">创建一个局部变量<code>movieplayer</code>，支持在当前模板的数据绑定和事件绑定表达式中访问<code>video</code>元素的实例。</p><p translation-origin="off">Creates a local variable <code>movieplayer</code> that provides access to the <code>video</code> element instance in data-binding and event-binding expressions in the current template.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;p <b>*myUnless</b>="myExpression"&gt;...&lt;/p&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">这个 <code>*</code> 符号会把当前元素转换成一个内嵌的模板。它等价于：
+<code>&lt;ng-template [myUnless]="myExpression"&gt;&lt;p&gt;...&lt;/p&gt;&lt;/ng-template&gt;</code></p><p translation-origin="off">The <code>*</code> symbol turns the current element into an embedded template. Equivalent to:
+<code>&lt;ng-template [myUnless]="myExpression"&gt;&lt;p&gt;...&lt;/p&gt;&lt;/ng-template&gt;</code></p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;p&gt;Card No.: <b>{{cardNumber | myCardNumberFormatter}}</b>&lt;/p&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">使用名叫<code>myCardNumberFormatter</code>的管道对表达式<code>cardNumber</code>的当前值进行变幻</p><p translation-origin="off">Transforms the current value of expression <code>cardNumber</code> via the pipe called <code>myCardNumberFormatter</code>.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;p&gt;Employer: <b>{{employer?.companyName}}</b>&lt;/p&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">安全导航操作符（<code>?</code>）表示<code>employer</code>字段是可选的，如果它是 <code>undefined</code> ，那么表达式其余的部分就会被忽略，并返回 <code>undefined</code>。</p><p translation-origin="off">The safe navigation operator (<code>?</code>) means that the <code>employer</code> field is optional and if <code>undefined</code>, the rest of the expression should be ignored.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;<b>svg:</b>rect x="0" y="0" width="100" height="100"/&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">模板中的 SVG 片段需要给它的根元素加上<code>svg:</code>前缀，以便把 SVG 元素和 HTML 元素区分开。</p><p translation-origin="off">An SVG snippet template needs an <code>svg:</code> prefix on its root element to disambiguate the SVG element from an HTML component.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;<b>svg</b>&gt;<br>  &lt;rect x="0" y="0" width="100" height="100"/&gt;<br>&lt;/<b>svg</b>&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">以<code>&lt;svg&gt;</code>作为根元素时会自动识别为 SVG 元素，不需要前缀。</p><p translation-origin="off">An <code>&lt;svg&gt;</code> root element is detected as an SVG element automatically, without the prefix.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    内置指令</p><p translation-origin="off">    Built-in directives</p>
+
+</th>
+<th>
+    <p translation-origin="off"><code>import { <a href="https://angular.cn/api/common/CommonModule" class="code-anchor">CommonModule</a> } from '@angular/common';</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code>&lt;section <b>*ngIf</b>="showSection"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">根据<code>showSection</code>表达式的结果，移除或重新创建 DOM 树的一部分。</p><p translation-origin="off">Removes or recreates a portion of the DOM tree based on the <code>showSection</code> expression.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;li <b>*ngFor</b>="let item of list"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">把 li 元素及其内容变成一个模板，并使用这个模板为列表中的每一个条目实例化一个视图。</p><p translation-origin="off">Turns the li element and its contents into a template, and uses that to instantiate a view for each item in list.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;div <b>[<a href="https://angular.cn/api/common/NgSwitch" class="code-anchor">ngSwitch</a>]</b>="conditionExpression"&gt;<br>  &lt;ng-template <b>[<b><a href="https://angular.cn/api/common/NgSwitchCase" class="code-anchor">ngSwitchCase</a></b>]</b>="case1Exp"&gt;...&lt;/ng-template&gt;<br>  &lt;ng-template <b>ngSwitchCase</b>="case2LiteralString"&gt;...&lt;/ng-template&gt;<br>  &lt;ng-template <b>ngSwitchDefault</b>&gt;...&lt;/ng-template&gt;<br>&lt;/div&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">根据<code>conditionExpression</code>的当前值选择一个嵌入式模板，并用它替换这个 div 的内容。</p><p translation-origin="off">Conditionally swaps the contents of the div by selecting one of the embedded templates based on the current value of <code>conditionExpression</code>.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;div <b>[ngClass]</b>="{'active': isActive, 'disabled': isDisabled}"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">根据 map 中的 value 是否为真，来决定该元素上是否出现与 name 对应的 CSS 类。右侧的表达式应该返回一个形如 <code>{class-name: true/false}</code> 的 map。</p><p translation-origin="off">Binds the presence of CSS classes on the element to the truthiness of the associated map values. The right-hand expression should return {class-name: true/false} map.</p>
+    
+</td>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code>&lt;div <b>[ngStyle]</b>="{'property': 'value'}"&gt;</code><br><code>&lt;div <b>[ngStyle]</b>="dynamicStyles()"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">允许你使用 CSS 为 HTML 元素指定样式。你可以像第一个例子那样直接使用 CSS，也可以调用组件中的方法。</p><p translation-origin="off">Allows you to assign styles to an HTML element using CSS. You can use CSS directly, as in the first example, or you can call a method from the component.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    表单</p><p translation-origin="off">    Forms</p>
+
+</th>
+<th>
+    <p translation-origin="off"><code>import { <a href="https://angular.cn/api/forms/FormsModule" class="code-anchor">FormsModule</a> } from '@angular/forms';</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code>&lt;input <b>[(ngModel)]</b>="userName"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">为表单控件提供双向数据绑定、解析和验证功能。</p><p translation-origin="off">Provides two-way data-binding, parsing, and validation for form controls.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    类装饰器</p><p translation-origin="off">    Class decorators</p>
+
+</th>
+<th>
+    <p translation-origin="off"><code>import { <a href="https://angular.cn/api/core/Directive" class="code-anchor">Directive</a>, ... } from '@angular/core';</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a>({...})</b><br>class MyComponent() {}</code></p>
+</td>
+<td>
+    <p translation-result="">声明一个类是组件，并提供该组件的元数据。</p><p translation-origin="off">Declares that a class is a component and provides metadata about the component.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/Directive" class="code-anchor">Directive</a>({...})</b><br>class MyDirective() {}</code></p>
+</td>
+<td>
+    <p translation-result="">声明一个类是指令，并提供该指令的元数据。</p><p translation-origin="off">Declares that a class is a directive and provides metadata about the directive.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/Pipe" class="code-anchor">Pipe</a>({...})</b><br>class MyPipe() {}</code></p>
+</td>
+<td>
+    <p translation-result="">声明一个类是管道，并提供该管道的元数据。</p><p translation-origin="off">Declares that a class is a pipe and provides metadata about the pipe.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>()</b><br>class MyService() {}</code></p>
+</td>
+<td>
+    <p translation-result="">声明某个类具有一些依赖。当依赖注入器要创建这个类的实例时，应该把这些依赖注入到它的构造函数中。</p><p translation-origin="off">Declares that a class has dependencies that should be injected into the constructor when the dependency injector is creating an instance of this class.
+</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    指令配置项</p><p translation-origin="off">    Directive configuration</p>
+
+</th>
+<th>
+    <p translation-origin="off"><code>@<a href="https://angular.cn/api/core/Directive" class="code-anchor">Directive</a>({ property1: value1, ... })</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code><b>selector:</b> '.cool-button:not(<a href="https://angular.cn/api/router/RouterLinkWithHref" class="code-anchor">a</a>)'</code></p>
+</td>
+<td>
+    <p translation-result="">指定一个 CSS 选择器，用于在模板中标记出该指令。支持的选择器类型包括：<code>元素名</code>、<code>[属性名]</code>, <code>.类名</code> 和 <code>:not()</code>。</p><p translation-origin="off">Specifies a CSS selector that identifies this directive within a template. Supported selectors include <code>element</code>,
+<code>[attribute]</code>, <code>.class</code>, and <code>:not()</code>.</p>
+    
+<p translation-result="">但不支持指定父子关系的选择器。</p><p translation-origin="off">Does not support parent-child relationship selectors.</p>
+
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>providers:</b> [MyService, { provide: ... }]</code></p>
+</td>
+<td>
+    <p translation-result="">该指令及其子指令的依赖注入提供商列表。</p><p translation-origin="off">List of dependency injection providers for this directive and its children.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    组件配置项</p><p translation-origin="off">    Component configuration</p>
+
+</th>
+<th>
+    <p translation-result=""><code>@<a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a></code> 继承自 <code>@<a href="https://angular.cn/api/core/Directive" class="code-anchor">Directive</a></code>，
+    因此，<code>@<a href="https://angular.cn/api/core/Directive" class="code-anchor">Directive</a></code> 的这些配置项也同样适用于组件。</p><p translation-origin="off">
+<code>@<a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a></code> extends <code>@<a href="https://angular.cn/api/core/Directive" class="code-anchor">Directive</a></code>,
+so the <code>@<a href="https://angular.cn/api/core/Directive" class="code-anchor">Directive</a></code> configuration applies to components as well</p>
+    
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code><b>moduleId:</b> module.id</code></p>
+</td>
+<td>
+    <p translation-result="">如果设置了，那么 <code>templateUrl</code> 和 <code>styleUrl</code> 的路径就会相对于当前组件进行解析。</p><p translation-origin="off">If set, the <code>templateUrl</code> and <code>styleUrl</code> are resolved relative to the component.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>viewProviders:</b> [MyService, { provide: ... }]</code></p>
+</td>
+<td>
+    <p translation-result="">依赖注入提供商列表，但它们的范围被限定为当前组件的视图。</p><p translation-origin="off">List of dependency injection providers scoped to this component's view.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>template:</b> 'Hello {{name}}'<br><b>templateUrl:</b> 'my-component.html'</code></p>
+</td>
+<td>
+    <p translation-result="">当前组件视图的内联模板或外部模板的 URL 。</p><p translation-origin="off">Inline template or external template URL of the component's view.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>styles:</b> ['.primary {color: red}']<br><b>styleUrls:</b> ['my-component.css']</code></p>
+</td>
+<td>
+    <p translation-result="">用于为当前组件的视图提供样式的内联 CSS 或外部样式表 URL 的列表。</p><p translation-origin="off">List of inline CSS styles or external stylesheet URLs for styling the component’s view.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    给指令和组件使用的类属性配置项</p><p translation-origin="off">    Class field decorators for directives and components</p>
+
+</th>
+<th>
+    <p translation-origin="off"><code>import { <a href="https://angular.cn/api/core/Input" class="code-anchor">Input</a>, ... } from '@angular/core';</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/Input" class="code-anchor">Input</a>()</b> myProperty;</code></p>
+</td>
+<td>
+    <p translation-result="">声明一个输入属性，你可以通过属性绑定来更新它，如 <code>&lt;my-cmp [myProperty]="someExpression"&gt;</code>。 </p><p translation-origin="off">Declares an input property that you can update via property binding (example:
+<code>&lt;my-cmp [myProperty]="someExpression"&gt;</code>).</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/Output" class="code-anchor">Output</a>()</b> myEvent = new <a href="https://angular.cn/api/core/EventEmitter" class="code-anchor">EventEmitter</a>();</code></p>
+</td>
+<td>
+    <p translation-result="">声明一个输出属性，它发出事件，你可以用事件绑定来订阅它们（如：<code>&lt;my-cmp (myEvent)="doSomething()"&gt;</code>）。</p><p translation-origin="off">Declares an output property that fires events that you can subscribe to with an event binding (example: <code>&lt;my-cmp (myEvent)="doSomething()"&gt;</code>).</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/HostBinding" class="code-anchor">HostBinding</a>('class.valid')</b> isValid;</code></p>
+</td>
+<td>
+    <p translation-result="">把宿主元素的一个属性（这里是 CSS 类 <code>valid</code>）绑定到指令或组件上的 <code>isValid</code> 属性。</p><p translation-origin="off">Binds a host element property (here, the CSS class <code>valid</code>) to a directive/component property (<code>isValid</code>).</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/HostListener" class="code-anchor">HostListener</a>('click', ['$event'])</b> onClick(e) {...}</code></p>
+</td>
+<td>
+    <p translation-result="">用指令或组件上的<code>onClick</code>方法订阅宿主元素上的<code>click</code>事件，并从中获取<code>$event</code>参数（可选）</p><p translation-origin="off">Subscribes to a host element event (<code>click</code>) with a directive/component method (<code>onClick</code>), optionally passing an argument (<code>$event</code>).</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/ContentChild" class="code-anchor">ContentChild</a>(myPredicate)</b> myChildComponent;</code></p>
+</td>
+<td>
+    <p translation-result="">把组件内容查询（<code>myPredicate</code>）的第一个结果绑定到该类的 <code>myChildComponent</code> 属性上。</p><p translation-origin="off">Binds the first result of the component content query (<code>myPredicate</code>) to a property (<code>myChildComponent</code>) of the class.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/ContentChildren" class="code-anchor">ContentChildren</a>(myPredicate)</b> myChildComponents;</code></p>
+</td>
+<td>
+    <p translation-result="">把组件内容查询（<code>myPredicate</code>）的全部结果绑定到该类的 <code>myChildComponents</code> 属性上</p><p translation-origin="off">Binds the results of the component content query (<code>myPredicate</code>) to a property (<code>myChildComponents</code>) of the class.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/ViewChild" class="code-anchor">ViewChild</a>(myPredicate)</b> myChildComponent;</code></p>
+</td>
+<td>
+    <p translation-result="">把组件视图查询（<code>myPredicate</code>）的第一个结果绑定到该类的 <code>myChildComponent</code> 属性上。对指令无效。</p><p translation-origin="off">Binds the first result of the component view query (<code>myPredicate</code>) to a property (<code>myChildComponent</code>) of the class. Not available for directives.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>@<a href="https://angular.cn/api/core/ViewChildren" class="code-anchor">ViewChildren</a>(myPredicate)</b> myChildComponents;</code></p>
+</td>
+<td>
+    <p translation-result="">把组件视图查询（<code>myPredicate</code>）的全部结果绑定到该类的 <code>myChildComponents</code> 属性上。对指令无效。</p><p translation-origin="off">Binds the results of the component view query (<code>myPredicate</code>) to a property (<code>myChildComponents</code>) of the class. Not available for directives.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    指令与组件的变更检测与生命周期钩子</p><p translation-origin="off">    Directive and component change detection and lifecycle hooks</p>
+
+</th>
+<th>
+    <p translation-result="">由类的方法实现。</p><p translation-origin="off">(implemented as class methods)
+</p>
+    
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code><b>constructor(myService: MyService, ...)</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">在任何其它生命周期钩子之前调用。可以用它来注入依赖项，但不要在这里做正事。</p><p translation-origin="off">Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>ngOnChanges(changeRecord)</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">每当输入属性发生变化时就会调用，但位于处理内容（<code>ng-content</code>）或子视图之前。</p><p translation-origin="off">Called after every change to input properties and before processing content or child views.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>ngOnInit()</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">在调用完构造函数、初始化完所有输入属性并首次调用过<code>ngOnChanges</code>之后调用。</p><p translation-origin="off">Called after the constructor, initializing input properties, and the first call to <code>ngOnChanges</code>.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>ngDoCheck()</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">每当对组件或指令的输入属性进行变更检测时就会调用。可以用它来扩展变更检测逻辑，执行自定义的检测逻辑。</p><p translation-origin="off">Called every time that the input properties of a component or a directive are checked. Use it to extend change detection by performing a custom check.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>ngAfterContentInit()</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result=""><code>ngOnInit</code>完成之后，当组件或指令的内容（<code>ng-content</code>）已经初始化完毕时调用。</p><p translation-origin="off">Called after <code>ngOnInit</code> when the component's or directive's content has been initialized.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>ngAfterContentChecked()</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">每当组件或指令的内容（<code>ng-content</code>）做变更检测时调用。</p><p translation-origin="off">Called after every check of the component's or directive's content.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>ngAfterViewInit()</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">当<code>ngAfterContentInit</code>完毕，并且组件的视图及其子视图或指令所属的视图已经初始化完毕时调用。
+</p><p translation-origin="off">Called after <code>ngAfterContentInit</code> when the component's views and child views / the view that a directive is in has been initialized.</p>
+    </td>
+</tr><tr>
+<td>
+<p>    <code><b>ngAfterViewChecked()</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">当组件的视图及其子视图或指令所属的视图每次执行变更检测时调用。</p><p translation-origin="off">Called after every check of the component's views and child views / the view that a directive is in.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><b>ngOnDestroy()</b> { ... }</code></p>
+</td>
+<td>
+    <p translation-result="">只在实例被销毁前调用一次。</p><p translation-origin="off">Called once, before the instance is destroyed.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    依赖注入配置项</p><p translation-origin="off">    Dependency injection configuration</p>
+
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code>{ <b>provide</b>: MyService, <b>useClass</b>: MyMockService }</code></p>
+</td>
+<td>
+    <p translation-result="">把 <code>MyService</code> 的服务提供商设置或改写为 <code>MyMockService</code> 类。</p><p translation-origin="off">Sets or overrides the provider for <code>MyService</code> to the <code>MyMockService</code> class.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>{ <b>provide</b>: MyService, <b>useFactory</b>: myFactory }</code></p>
+</td>
+<td>
+    <p translation-result="">把 <code>MyService</code> 的服务提供商设置或改写为 <code>myFactory</code> 工厂函数。</p><p translation-origin="off">Sets or overrides the provider for <code>MyService</code> to the <code>myFactory</code> factory function.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>{ <b>provide</b>: MyValue, <b>useValue</b>: 41 }</code></p>
+</td>
+<td>
+    <p translation-result="">把 <code>MyValue</code> 的服务提供商改写为一个特定的值 <code>41</code> 。</p><p translation-origin="off">Sets or overrides the provider for <code>MyValue</code> to the value <code>41</code>.</p>
+    
+</td>
+</tr>
+</tbody></table>
+<table class="is-full-width is-fixed-layout">
+<tbody><tr>
+<th>
+<p translation-result="">    路由与导航</p><p translation-origin="off">    Routing and navigation</p>
+
+</th>
+<th>
+    <p translation-origin="off"><code>import { <a href="https://angular.cn/api/router/Routes" class="code-anchor">Routes</a>, <a href="https://angular.cn/api/router/RouterModule" class="code-anchor">RouterModule</a>, ... } from '@angular/router';</code>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<p translation-origin="off">    <code>const routes: <b><a href="https://angular.cn/api/router/Routes" class="code-anchor">Routes</a></b> = [<br>  { path: '', component: HomeComponent },<br>  { path: 'path/:routeParam', component: MyComponent },<br>  { path: 'staticPath', component: ... },<br>  { path: '**', component: ... },<br>  { path: 'oldPath', redirectTo: '/staticPath' },<br>  { path: ..., component: ..., data: { message: 'Custom' } }<br>]);<br><br>const routing = RouterModule.forRoot(routes);</code></p>
+</td>
+<td>
+    <p translation-result="">为该应用配置路由。支持静态、参数化、重定向和通配符路由。也支持自定义路由数据和解析（resolve）函数。</p><p translation-origin="off">Configures routes for the application. Supports static, parameterized, redirect, and wildcard routes. Also supports custom route data and resolve.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><br>&lt;<b><a href="https://angular.cn/api/router/RouterOutlet" class="code-anchor">router-outlet</a></b>&gt;&lt;/<b><a href="https://angular.cn/api/router/RouterOutlet" class="code-anchor">router-outlet</a></b>&gt;<br>&lt;<b><a href="https://angular.cn/api/router/RouterOutlet" class="code-anchor">router-outlet</a></b> name="aux"&gt;&lt;/<b>router-outlet</b>&gt;<br></code></p>
+</td>
+<td>
+    <p translation-result="">标记出一个位置，用来加载活动路由的组件。</p><p translation-origin="off">Marks the location to load the component of the active route.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code><br>&lt;<a href="https://angular.cn/api/router/RouterLinkWithHref" class="code-anchor">a</a> <a href="https://angular.cn/api/router/RouterLink" class="code-anchor">routerLink</a>="/path"&gt;<br>&lt;<a href="https://angular.cn/api/router/RouterLinkWithHref" class="code-anchor">a</a> <b>[<a href="https://angular.cn/api/router/RouterLink" class="code-anchor">routerLink</a>]</b>="[ '/path', routeParam ]"&gt;<br>&lt;a <b>[routerLink]</b>="[ '/path', { matrixParam: 'value' } ]"&gt;<br>&lt;a <b>[routerLink]</b>="[ '/path' ]" [queryParams]="{ page: 1 }"&gt;<br>&lt;a <b>[routerLink]</b>="[ '/path' ]" fragment="anchor"&gt;<br></code></p>
+</td>
+<td>
+    <p translation-result="">使用路由体系创建一个到其它视图的链接。路由体系由路由路径、必要参数、可选参数、查询参数和文档片段组成。要导航到根路由，请使用<code>/</code>前缀；要导航到子路由，使用<code>./</code>前缀；要导航到兄弟路由或父级路由，使用<code>../</code>前缀。</p><p translation-origin="off">Creates a link to a different view based on a route instruction consisting of a route path, required and optional parameters, query parameters, and a fragment. To navigate to a root route, use the <code>/</code> prefix; for a child route, use the <code>./</code>prefix; for a sibling or parent, use the <code>../</code> prefix.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>&lt;<a href="https://angular.cn/api/router/RouterLinkWithHref" class="code-anchor">a</a> [<a href="https://angular.cn/api/router/RouterLink" class="code-anchor">routerLink</a>]="[ '/path' ]" <a href="https://angular.cn/api/router/RouterLinkActive" class="code-anchor">routerLinkActive</a>="active"&gt;</code></p>
+</td>
+<td>
+    <p translation-result="">当 <code><a href="https://angular.cn/api/router/RouterLink" class="code-anchor">routerLink</a></code> 指向的路由变成活动路由时，为当前元素添加一些类（比如这里的 <code>active</code>）。</p><p translation-origin="off">The provided classes are added to the element when the <code><a href="https://angular.cn/api/router/RouterLink" class="code-anchor">routerLink</a></code> becomes the current active route.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>class <b><a href="https://angular.cn/api/router/CanActivate" class="code-anchor">CanActivate</a></b>Guard implements <b><a href="https://angular.cn/api/router/CanActivate" class="code-anchor">CanActivate</a></b> {<br>    canActivate(<br>      route: <a href="https://angular.cn/api/router/ActivatedRouteSnapshot" class="code-anchor">ActivatedRouteSnapshot</a>,<br>      state: RouterStateSnapshot<br>    ): Observable&lt;boolean&gt;|Promise&lt;boolean&gt;|boolean { ... }<br>}<br><br>{ path: ..., canActivate: [<b>CanActivate</b>Guard] }</code></p>
+</td>
+<td>
+    <p translation-result="">用来定义类的接口。路由器会首先调用本接口来决定是否激活该路由。应该返回一个 <code>boolean</code> 或能解析成 <code>boolean</code> 的 <code>Observable/Promise</code>。</p><p translation-origin="off">An interface for defining a class that the router should call first to determine if it should activate this component. Should return a boolean or an Observable/Promise that resolves to a boolean.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>class <b><a href="https://angular.cn/api/router/CanDeactivate" class="code-anchor">CanDeactivate</a></b>Guard implements <b><a href="https://angular.cn/api/router/CanDeactivate" class="code-anchor">CanDeactivate</a></b>&lt;T&gt; {<br>    canDeactivate(<br>      component: T,<br>      route: ActivatedRouteSnapshot,<br>      state: RouterStateSnapshot<br>    ): Observable&lt;boolean&gt;|Promise&lt;boolean&gt;|boolean { ... }<br>}<br><br>{ path: ..., canDeactivate: [<b>CanDeactivate</b>Guard] }</code></p>
+</td>
+<td>
+    <p translation-result="">用来定义类的接口。路由器会在导航离开前首先调用本接口以决定是否取消激活本路由。应该返回一个 <code>boolean</code> 或能解析成 <code>boolean</code> 的 <code>Observable/Promise</code>。</p><p translation-origin="off">An interface for defining a class that the router should call first to determine if it should deactivate this component after a navigation. Should return a boolean or an Observable/Promise that resolves to a boolean.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>class <b><a href="https://angular.cn/api/router/CanActivateChild" class="code-anchor">CanActivateChild</a></b>Guard implements <b><a href="https://angular.cn/api/router/CanActivateChild" class="code-anchor">CanActivateChild</a></b> {<br>    canActivateChild(<br>      route: <a href="https://angular.cn/api/router/ActivatedRouteSnapshot" class="code-anchor">ActivatedRouteSnapshot</a>,<br>      state: RouterStateSnapshot<br>    ): Observable&lt;boolean&gt;|Promise&lt;boolean&gt;|boolean { ... }<br>}<br><br>{ path: ..., canActivateChild: [CanActivateGuard],<br>    children: ... }</code></p>
+</td>
+<td>
+    <p translation-result="">用来定义类的接口。路由器会首先调用本接口来决定是否激活一个子路由。应该返回一个 <code>boolean</code> 或能解析成 <code>boolean</code> 的 <code>Observable/Promise</code>。</p><p translation-origin="off">An interface for defining a class that the router should call first to determine if it should activate the child route. Should return a boolean or an Observable/Promise that resolves to a boolean.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>class <b><a href="https://angular.cn/api/router/Resolve" class="code-anchor">Resolve</a></b>Guard implements <b><a href="https://angular.cn/api/router/Resolve" class="code-anchor">Resolve</a></b>&lt;T&gt; {<br>    resolve(<br>      route: <a href="https://angular.cn/api/router/ActivatedRouteSnapshot" class="code-anchor">ActivatedRouteSnapshot</a>,<br>      state: RouterStateSnapshot<br>    ): Observable&lt;any&gt;|Promise&lt;any&gt;|any { ... }<br>}<br><br>{ path: ..., resolve: [<b>Resolve</b>Guard] }</code></p>
+</td>
+<td>
+    <p translation-result="">用来定义类的接口。路由器会在渲染该路由之前，首先调用它来解析路由数据。应该返回一个值或能解析成值的 <code>Observable/Promise</code>。</p><p translation-origin="off">An interface for defining a class that the router should call first to resolve route data before rendering the route. Should return a value or an Observable/Promise that resolves to a value.</p>
+    
+</td>
+</tr><tr>
+<td>
+<p translation-origin="off">    <code>class <b><a href="https://angular.cn/api/router/CanLoad" class="code-anchor">CanLoad</a></b>Guard implements <b><a href="https://angular.cn/api/router/CanLoad" class="code-anchor">CanLoad</a></b> {<br>    canLoad(<br>      route: <a href="https://angular.cn/api/router/Route" class="code-anchor">Route</a><br>    ): Observable&lt;boolean&gt;|Promise&lt;boolean&gt;|boolean { ... }<br>}<br><br>{ path: ..., canLoad: [<b>CanLoad</b>Guard], loadChildren: ... }</code></p>
+</td>
+<td>
+    <p translation-result="">用来定义类的接口。路由器会首先调用它来决定是否应该加载一个惰性加载模块。应该返回一个 <code>boolean</code> 或能解析成 <code>boolean</code> 的 <code>Observable/Promise</code>。</p><p translation-origin="off">An interface for defining a class that the router should call first to check if the lazy loaded module should be loaded. Should return a boolean or an Observable/Promise that resolves to a boolean.</p>
+    
+</td>
+</tr>
+</tbody></table>
+</div>
+
+</div>
+<!-- links to this doc:
+-->
+<!-- links from this doc:
+ - api/common/CommonModule
+ - api/common/NgSwitch
+ - api/common/NgSwitchCase
+ - api/core/Component
+ - api/core/ContentChild
+ - api/core/ContentChildren
+ - api/core/Directive
+ - api/core/EventEmitter
+ - api/core/HostBinding
+ - api/core/HostListener
+ - api/core/Injectable
+ - api/core/Input
+ - api/core/NgModule
+ - api/core/Output
+ - api/core/Pipe
+ - api/core/ViewChild
+ - api/core/ViewChildren
+ - api/forms/FormsModule
+ - api/platform-browser-dynamic/platformBrowserDynamic
+ - api/platform-browser/BrowserModule
+ - api/router/ActivatedRouteSnapshot
+ - api/router/CanActivate
+ - api/router/CanActivateChild
+ - api/router/CanDeactivate
+ - api/router/CanLoad
+ - api/router/Resolve
+ - api/router/Route
+ - api/router/RouterLink
+ - api/router/RouterLinkActive
+ - api/router/RouterLinkWithHref
+ - api/router/RouterModule
+ - api/router/RouterOutlet
+ - api/router/Routes
+ - guide/cheatsheet#cheat-sheet
+--></div></aio-doc-viewer><aio-dt><!----></aio-dt></section></mat-sidenav-content></mat-sidenav-container><!----><footer class="no-print"><aio-footer><div class="grid-fluid"><!----><div class="footer-block ng-star-inserted"><h3>资源</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://angular.cn/about" title="Angular 贡献者。">关于</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.cn/resources" title="网络上的 Angular 工具、培训、博客等">资源列表</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.cn/presskit" title="我们的联系方式、LOGO 和品牌">宣传资料</a></li><li class="ng-star-inserted"><a class="link" href="https://blog.angular.io/" title="Angular 官方博客">博客</a></li></ul></div><div class="footer-block ng-star-inserted"><h3>帮助</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://stackoverflow.com/questions/tagged/angular" title="Stack Overflow: 这里的社区会回答你关于 Angular 的技术问题">Stack Overflow</a></li><li class="ng-star-inserted"><a class="link" href="https://gitter.im/angular/angular" title="和老鸟聊 Angular">Gitter</a></li><li class="ng-star-inserted"><a class="link" href="https://github.com/angular/angular/issues" title="在 github 上报告问题和建议。">报告问题</a></li><li class="ng-star-inserted"><a class="link" href="https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md" title="让我们彼此尊重">行为规范</a></li></ul></div><div class="footer-block ng-star-inserted"><h3>社区</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://angular.cn/events" title="Post issues and suggestions on github.">活动</a></li><li class="ng-star-inserted"><a class="link" href="http://www.meetup.com/topics/angularjs/" title="参加聚会，向别的开发人员学习">聚会</a></li><li class="ng-star-inserted"><a class="link" href="https://twitter.com/angular" title="Twitter">Twitter</a></li><li class="ng-star-inserted"><a class="link" href="https://github.com/angular/angular" title="GitHub">GitHub</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.cn/contribute" title="向 Angular 做贡献">做贡献</a></li></ul></div><div class="footer-block ng-star-inserted"><h3>多语言</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://angular.io/" title="English Version.">English Version</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.jp/" title="日本語版">日本語版</a></li></ul></div></div><p> Powered by Google ©2010-2018. 代码授权方式：<a href="https://angular.cn/license" title="License text">MIT-style License</a>. 文档授权方式：<a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. </p><p><span class="text-caption">本网站由第三方公司洛阳永欣维护 &nbsp;<a href="http://www.miitbeian.gov.cn/">豫ICP备16019859号-1</a></span></p><p> 当前版本：6.0.1-build.180+sha.8494cf4. </p></aio-footer></footer></aio-shell>
+
+  <noscript>
+    &lt;div class="background-sky hero"&gt;&lt;/div&gt;
+    &lt;section id="intro"&gt;
+      &lt;div class="hero-logo"&gt;
+        &lt;img src="assets/images/logos/angular/angular.svg" width="250" height="250"&gt;
+      &lt;/div&gt;
+      &lt;div class="homepage-container"&gt;
+        &lt;div class="hero-headline"&gt;一套框架，多种平台&lt;br&gt;移动 &amp;amp; 桌面&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+    &lt;h2 style="color: red; text-align: center; margin-top: -50px;"&gt;
+      &lt;b&gt;&lt;i&gt;该网站需要浏览器支持 JavaScript &lt;/i&gt;&lt;/b&gt;
+    &lt;/h2&gt;
+  </noscript>
+
+
+<script type="text/javascript" src="./Angular - 速查表_files/runtime.e7e60529879ffb07e28e.js.下载"></script><script type="text/javascript" src="./Angular - 速查表_files/polyfills.56dafdd128abda80a86c.js.下载"></script><script type="text/javascript" src="./Angular - 速查表_files/main.e580488e21fdad9d749c.js.下载"></script><div class="cdk-visually-hidden" aria-atomic="true" aria-live="polite"></div></body></html>

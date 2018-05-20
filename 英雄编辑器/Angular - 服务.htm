@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)https://angular.cn/tutorial/toh-pt4 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Angular - 服务</title>
+  <!--<base href="/">--><base href=".">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" type="image/x-icon" href="https://angular.cn/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://angular.cn/assets/images/favicons/favicon.ico">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-194x194.png" sizes="194x194">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="https://angular.cn/assets/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://angular.cn/assets/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://angular.cn/assets/images/favicons/apple-touch-icon-144x144.png">
+
+  <!-- NOTE: These need to be kept in sync with `ngsw-manifest.json`. -->
+  <link href="./Angular - 服务_files/Material_Icons.css" rel="stylesheet">
+  <link href="./Angular - 服务_files/Droid_Sans_Mono.css" rel="stylesheet">
+  <link href="./Angular - 服务_files/font-awesome.min.css" rel="stylesheet">
+  <!-- -->
+
+  <link rel="manifest" href="https://angular.cn/pwa-manifest.json">
+  <meta name="theme-color" content="#1976d2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+
+  <script async="" src="./Angular - 服务_files/analytics.js.下载"></script><script>
+    // Dynamically, pre-emptively, add `noindex`, which will be removed when the doc is ready and valid
+    tag = document.createElement('meta'); tag.name = 'robots'; tag.content = 'noindex';
+    document.head.appendChild(tag);
+  </script>
+
+  <!-- Google Analytics -->
+  <script>
+  // Note this is a customised version of the GA tracking snippet
+  // See the comments below for more info
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;
+  ~i.name.indexOf('NG_DEFER_BOOTSTRAP')|| // only load library if not running e2e tests
+  m.parentNode.insertBefore(a,m)
+  })(window,document,'script','assets/js/analytics.js','ga');
+  </script>
+  <!-- End Google Analytics -->
+
+  <script>
+    // Report fatal errors to Google Analytics
+    window.onerror = function() {
+      ga('send', 'exception', {exDescription: formatError.apply(null, arguments), exFatal: true});
+
+      function formatError(msg, url, line, col, e) {
+        var stack;
+        msg = msg.replace(/^Error: /, '');
+        if (e) {
+          stack = e.stack
+              // strip the leading "Error: " from the stack trace
+              .replace(/^Error: /, '')
+              // strip the message from the stack trace, if present
+              .replace(msg + '\n', '')
+              // strip leading spaces
+              .replace(/^ +/gm, '')
+              // strip all leading "at " for each frame
+              .replace(/^at /gm, '')
+              // replace long urls with just the last segment: `filename:line:column`
+              .replace(/(?: \(|@)http.+\/([^/)]+)\)?(?:\n|$)/gm, '@$1\n')
+              // replace "eval code" in Edge
+              .replace(/ *\(eval code(:\d+:\d+)\)(?:\n|$)/gm, '@???$1\n')
+        } else {
+          line = line || '?';
+          col = col || '?';
+          stack = url + ':' + line + ':' + col;
+        }
+        return (msg + '\n' + stack).substr(0, 150);
+      }
+    };
+  </script>
+
+  <script>
+    if (window.document.documentMode) {
+      // polyfill IE11 in a blocking way
+      var s = document.createElement('script');
+      s.src = 'generated/ie-polyfills.min.js';
+      document.head.appendChild(s);
+    } else if (!Object.assign) {
+      // polyfill other non-evergreen browsers in a blocking way
+      var polyfillUrl = "https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find&flags=gated&unknown=polyfill";
+
+      // send a blocking XHR to fetch the polyfill
+      // then append it to the document so that its eval-ed synchronously
+      // this is required because the method used for IE is not reliable with other non-evergreen browsers
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", function() {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        var code = this.responseText;
+        s.appendChild(document.createTextNode(code));
+        document.head.appendChild(s);
+      });
+      xhr.open("GET", polyfillUrl, false);
+      xhr.send();
+    }
+  </script>
+
+  <script>
+    //load CE polyfill
+    //HACK: webpack's html plugin mangles the document.write calls if we don't trick it.
+
+    //load the ES5 shim for browsers with native CE support
+    function loadCustomElementsShim(){
+      document.write('<scri' + 'pt src="assets/js/native-shim.js"><' + '/script>');
+    }
+
+    //load the full custom elements polyfill for browsers without support
+    function loadCustomElementsPolyfill(){
+      document.write('<scri' + 'pt src="assets/js/custom-elements.min.js"><' + '/script>');
+    }
+    //detect if we have native CE support
+    if(!window.customElements){
+      loadCustomElementsPolyfill();
+    }
+    else {
+      loadCustomElementsShim();
+    }
+  </script><script src="./Angular - 服务_files/native-shim.js.下载"></script>
+
+<link rel="stylesheet" href="./Angular - 服务_files/styles.613b7c8de73e274bd4c6.css"><style>@media screen and (-ms-high-contrast:active){.mat-toolbar{outline:solid 1px}}.mat-toolbar-row,.mat-toolbar-single-row{display:flex;box-sizing:border-box;padding:0 16px;width:100%;flex-direction:row;align-items:center;white-space:nowrap}.mat-toolbar-multiple-rows{display:flex;box-sizing:border-box;flex-direction:column;width:100%}.mat-toolbar-multiple-rows{min-height:64px}.mat-toolbar-row,.mat-toolbar-single-row{height:64px}@media (max-width:599px){.mat-toolbar-multiple-rows{min-height:56px}.mat-toolbar-row,.mat-toolbar-single-row{height:56px}}</style><style>.mat-button,.mat-flat-button,.mat-icon-button,.mat-stroked-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible}.mat-button[disabled],.mat-flat-button[disabled],.mat-icon-button[disabled],.mat-stroked-button[disabled]{cursor:default}.mat-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-button.cdk-program-focused .mat-button-focus-overlay,.mat-flat-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-flat-button.cdk-program-focused .mat-button-focus-overlay,.mat-icon-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-icon-button.cdk-program-focused .mat-button-focus-overlay,.mat-stroked-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-stroked-button.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-button::-moz-focus-inner,.mat-flat-button::-moz-focus-inner,.mat-icon-button::-moz-focus-inner,.mat-stroked-button::-moz-focus-inner{border:0}.mat-button .mat-button-focus-overlay,.mat-icon-button .mat-button-focus-overlay{transition:none;opacity:0}.mat-button:hover .mat-button-focus-overlay,.mat-stroked-button:hover .mat-button-focus-overlay{opacity:1}.mat-raised-button{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible;transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}.mat-raised-button[disabled]{cursor:default}.mat-raised-button.cdk-keyboard-focused .mat-button-focus-overlay,.mat-raised-button.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-raised-button::-moz-focus-inner{border:0}.mat-raised-button:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-raised-button:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}.mat-raised-button[disabled]{box-shadow:none}.mat-stroked-button{border:1px solid currentColor;padding:0 15px;line-height:34px}.mat-stroked-button:not([class*=mat-elevation-z]){box-shadow:0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12)}.mat-flat-button:not([class*=mat-elevation-z]){box-shadow:0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12)}.mat-fab{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible;transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}.mat-fab[disabled]{cursor:default}.mat-fab.cdk-keyboard-focused .mat-button-focus-overlay,.mat-fab.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-fab::-moz-focus-inner{border:0}.mat-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}.mat-fab[disabled]{box-shadow:none}.mat-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.mat-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-fab .mat-button-wrapper{padding:16px 0;display:inline-block;line-height:24px}.mat-mini-fab{box-sizing:border-box;position:relative;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer;outline:0;border:none;-webkit-tap-highlight-color:transparent;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px;overflow:visible;transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}.mat-mini-fab[disabled]{cursor:default}.mat-mini-fab.cdk-keyboard-focused .mat-button-focus-overlay,.mat-mini-fab.cdk-program-focused .mat-button-focus-overlay{opacity:1}.mat-mini-fab::-moz-focus-inner{border:0}.mat-mini-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.mat-mini-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}.mat-mini-fab[disabled]{box-shadow:none}.mat-mini-fab:not([class*=mat-elevation-z]){box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.mat-mini-fab:not([disabled]):active:not([class*=mat-elevation-z]){box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}.mat-mini-fab .mat-button-wrapper{padding:8px 0;display:inline-block;line-height:24px}.mat-icon-button{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}.mat-icon-button .mat-icon,.mat-icon-button i{line-height:24px}.mat-button-focus-overlay,.mat-button-ripple{top:0;left:0;right:0;bottom:0;position:absolute;pointer-events:none}.mat-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;opacity:0;transition:opacity .2s cubic-bezier(.35,0,.25,1),background-color .2s cubic-bezier(.35,0,.25,1)}@media screen and (-ms-high-contrast:active){.mat-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.mat-button-ripple-round{border-radius:50%;z-index:1}.mat-button .mat-button-wrapper>*,.mat-fab .mat-button-wrapper>*,.mat-flat-button .mat-button-wrapper>*,.mat-icon-button .mat-button-wrapper>*,.mat-mini-fab .mat-button-wrapper>*,.mat-raised-button .mat-button-wrapper>*,.mat-stroked-button .mat-button-wrapper>*{vertical-align:middle}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{display:block;font-size:inherit;width:2.5em;height:2.5em}@media screen and (-ms-high-contrast:active){.mat-button,.mat-fab,.mat-flat-button,.mat-icon-button,.mat-mini-fab,.mat-raised-button{outline:solid 1px}}</style><style>.mat-icon{background-repeat:no-repeat;display:inline-block;fill:currentColor;height:24px;width:24px}.mat-icon.mat-icon-inline{font-size:inherit;height:inherit;line-height:inherit;width:inherit}[dir=rtl] .mat-icon-rtl-mirror{transform:scale(-1,1)}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon{display:block}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button .mat-icon,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button .mat-icon{margin:auto}</style><style>.mat-drawer-container{position:relative;z-index:1;box-sizing:border-box;-webkit-overflow-scrolling:touch;display:block;overflow:hidden}.mat-drawer-container[fullscreen]{top:0;left:0;right:0;bottom:0;position:absolute}.mat-drawer-container[fullscreen].mat-drawer-opened{overflow:hidden}.mat-drawer-container.mat-drawer-container-explicit-backdrop .mat-drawer-side{z-index:3}.mat-drawer-backdrop{top:0;left:0;right:0;bottom:0;position:absolute;display:block;z-index:3;visibility:hidden}.mat-drawer-backdrop.mat-drawer-shown{visibility:visible}.mat-drawer-transition .mat-drawer-backdrop{transition-duration:.4s;transition-timing-function:cubic-bezier(.25,.8,.25,1);transition-property:background-color,visibility}@media screen and (-ms-high-contrast:active){.mat-drawer-backdrop{opacity:.5}}.mat-drawer-content{position:relative;z-index:1;display:block;height:100%;overflow:auto}.mat-drawer-transition .mat-drawer-content{transition-duration:.4s;transition-timing-function:cubic-bezier(.25,.8,.25,1);transition-property:transform,margin-left,margin-right}.mat-drawer{position:relative;z-index:4;display:block;position:absolute;top:0;bottom:0;z-index:3;outline:0;box-sizing:border-box;overflow-y:auto;transform:translate3d(-100%,0,0)}@media screen and (-ms-high-contrast:active){.mat-drawer,[dir=rtl] .mat-drawer.mat-drawer-end{border-right:solid 1px currentColor}}@media screen and (-ms-high-contrast:active){.mat-drawer.mat-drawer-end,[dir=rtl] .mat-drawer{border-left:solid 1px currentColor;border-right:none}}.mat-drawer.mat-drawer-side{z-index:2}.mat-drawer.mat-drawer-end{right:0;transform:translate3d(100%,0,0)}[dir=rtl] .mat-drawer{transform:translate3d(100%,0,0)}[dir=rtl] .mat-drawer.mat-drawer-end{left:0;right:auto;transform:translate3d(-100%,0,0)}.mat-drawer:not(.mat-drawer-side){box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12)}.mat-sidenav-fixed{position:fixed}</style><script charset="utf-8" src="./Angular - 服务_files/live-example-live-example-module-ngfactory.76888e8a441aab262101.js.下载"></script><style>.mat-progress-bar{display:block;height:5px;overflow:hidden;position:relative;transition:opacity 250ms linear;width:100%}.mat-progress-bar .mat-progress-bar-element,.mat-progress-bar .mat-progress-bar-fill::after{height:100%;position:absolute;width:100%}.mat-progress-bar .mat-progress-bar-background{width:calc(100% + 10px)}.mat-progress-bar .mat-progress-bar-buffer{transform-origin:top left;transition:transform 250ms ease}.mat-progress-bar .mat-progress-bar-secondary{display:none}.mat-progress-bar .mat-progress-bar-fill{animation:none;transform-origin:top left;transition:transform 250ms ease}.mat-progress-bar .mat-progress-bar-fill::after{animation:none;content:'';display:inline-block;left:0}.mat-progress-bar[dir=rtl],[dir=rtl] .mat-progress-bar{transform:rotateY(180deg)}.mat-progress-bar[mode=query]{transform:rotateZ(180deg)}.mat-progress-bar[mode=query][dir=rtl],[dir=rtl] .mat-progress-bar[mode=query]{transform:rotateZ(180deg) rotateY(180deg)}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-fill,.mat-progress-bar[mode=query] .mat-progress-bar-fill{transition:none}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-primary,.mat-progress-bar[mode=query] .mat-progress-bar-primary{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-primary-indeterminate-translate 2s infinite linear;left:-145.166611%}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-primary.mat-progress-bar-fill::after,.mat-progress-bar[mode=query] .mat-progress-bar-primary.mat-progress-bar-fill::after{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-primary-indeterminate-scale 2s infinite linear}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-secondary,.mat-progress-bar[mode=query] .mat-progress-bar-secondary{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-secondary-indeterminate-translate 2s infinite linear;left:-54.888891%;display:block}.mat-progress-bar[mode=indeterminate] .mat-progress-bar-secondary.mat-progress-bar-fill::after,.mat-progress-bar[mode=query] .mat-progress-bar-secondary.mat-progress-bar-fill::after{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-secondary-indeterminate-scale 2s infinite linear}.mat-progress-bar[mode=buffer] .mat-progress-bar-background{-webkit-backface-visibility:hidden;backface-visibility:hidden;animation:mat-progress-bar-background-scroll 250ms infinite linear}@keyframes mat-progress-bar-primary-indeterminate-translate{0%{transform:translateX(0)}20%{animation-timing-function:cubic-bezier(.5,0,.70173,.49582);transform:translateX(0)}59.15%{animation-timing-function:cubic-bezier(.30244,.38135,.55,.95635);transform:translateX(83.67142%)}100%{transform:translateX(200.61106%)}}@keyframes mat-progress-bar-primary-indeterminate-scale{0%{transform:scaleX(.08)}36.65%{animation-timing-function:cubic-bezier(.33473,.12482,.78584,1);transform:scaleX(.08)}69.15%{animation-timing-function:cubic-bezier(.06,.11,.6,1);transform:scaleX(.66148)}100%{transform:scaleX(.08)}}@keyframes mat-progress-bar-secondary-indeterminate-translate{0%{animation-timing-function:cubic-bezier(.15,0,.51506,.40969);transform:translateX(0)}25%{animation-timing-function:cubic-bezier(.31033,.28406,.8,.73371);transform:translateX(37.65191%)}48.35%{animation-timing-function:cubic-bezier(.4,.62704,.6,.90203);transform:translateX(84.38617%)}100%{transform:translateX(160.27778%)}}@keyframes mat-progress-bar-secondary-indeterminate-scale{0%{animation-timing-function:cubic-bezier(.15,0,.51506,.40969);transform:scaleX(.08)}19.15%{animation-timing-function:cubic-bezier(.31033,.28406,.8,.73371);transform:scaleX(.4571)}44.15%{animation-timing-function:cubic-bezier(.4,.62704,.6,.90203);transform:scaleX(.72796)}100%{transform:scaleX(.08)}}@keyframes mat-progress-bar-background-scroll{to{transform:translateX(-10px)}}</style><script charset="utf-8" src="./Angular - 服务_files/code-code-example-module-ngfactory_code-code-tabs-module-ngfactory.6a5aabadc81dbdfa0f4e.js.下载"></script><script charset="utf-8" src="./Angular - 服务_files/code-code-tabs-module-ngfactory.8315a94f020cd25fe92d.js.下载"></script><script charset="utf-8" src="./Angular - 服务_files/code-code-example-module-ngfactory.d0ec50584c7428d1d6ed.js.下载"></script><script charset="utf-8" src="./Angular - 服务_files/12.50857b4475720140b255.js.下载"></script><style>.mat-tab-group{display:flex;flex-direction:column}.mat-tab-group.mat-tab-group-inverted-header{flex-direction:column-reverse}.mat-tab-label{height:48px;padding:0 24px;cursor:pointer;box-sizing:border-box;opacity:.6;min-width:160px;text-align:center;display:inline-flex;justify-content:center;align-items:center;white-space:nowrap;position:relative}.mat-tab-label:focus{outline:0}.mat-tab-label:focus:not(.mat-tab-disabled){opacity:1}.mat-tab-label.mat-tab-disabled{cursor:default}.mat-tab-label.mat-tab-label-content{display:inline-flex;justify-content:center;align-items:center;white-space:nowrap}@media (max-width:599px){.mat-tab-label{padding:0 12px}}@media (max-width:959px){.mat-tab-label{padding:0 12px}}.mat-tab-group[mat-stretch-tabs] .mat-tab-label{flex-basis:0;flex-grow:1}.mat-tab-body-wrapper{position:relative;overflow:hidden;display:flex;transition:height .5s cubic-bezier(.35,0,.25,1)}.mat-tab-body{top:0;left:0;right:0;bottom:0;position:absolute;display:block;overflow:hidden;flex-basis:100%}.mat-tab-body.mat-tab-body-active{position:relative;overflow-x:hidden;overflow-y:auto;z-index:1;flex-grow:1}.mat-tab-group.mat-tab-group-dynamic-height .mat-tab-body.mat-tab-body-active{overflow-y:hidden}</style><style>.mat-tab-header{display:flex;overflow:hidden;position:relative;flex-shrink:0}.mat-tab-label{height:48px;padding:0 24px;cursor:pointer;box-sizing:border-box;opacity:.6;min-width:160px;text-align:center;display:inline-flex;justify-content:center;align-items:center;white-space:nowrap;position:relative}.mat-tab-label:focus{outline:0}.mat-tab-label:focus:not(.mat-tab-disabled){opacity:1}.mat-tab-label.mat-tab-disabled{cursor:default}.mat-tab-label.mat-tab-label-content{display:inline-flex;justify-content:center;align-items:center;white-space:nowrap}@media (max-width:599px){.mat-tab-label{min-width:72px}}.mat-ink-bar{position:absolute;bottom:0;height:2px;transition:.5s cubic-bezier(.35,0,.25,1)}.mat-tab-group-inverted-header .mat-ink-bar{bottom:auto;top:0}@media screen and (-ms-high-contrast:active){.mat-ink-bar{outline:solid 2px;height:0}}.mat-tab-header-pagination{position:relative;display:none;justify-content:center;align-items:center;min-width:32px;cursor:pointer;z-index:2}.mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{display:flex}.mat-tab-header-pagination-before,.mat-tab-header-rtl .mat-tab-header-pagination-after{padding-left:4px}.mat-tab-header-pagination-before .mat-tab-header-pagination-chevron,.mat-tab-header-rtl .mat-tab-header-pagination-after .mat-tab-header-pagination-chevron{transform:rotate(-135deg)}.mat-tab-header-pagination-after,.mat-tab-header-rtl .mat-tab-header-pagination-before{padding-right:4px}.mat-tab-header-pagination-after .mat-tab-header-pagination-chevron,.mat-tab-header-rtl .mat-tab-header-pagination-before .mat-tab-header-pagination-chevron{transform:rotate(45deg)}.mat-tab-header-pagination-chevron{border-style:solid;border-width:2px 2px 0 0;content:'';height:8px;width:8px}.mat-tab-header-pagination-disabled{box-shadow:none;cursor:default}.mat-tab-label-container{display:flex;flex-grow:1;overflow:hidden;z-index:1}.mat-tab-list{flex-grow:1;position:relative;transition:transform .5s cubic-bezier(.35,0,.25,1)}.mat-tab-labels{display:flex}</style><style>.mat-tab-body-content{height:100%;overflow:auto}.mat-tab-group-dynamic-height .mat-tab-body-content{overflow:hidden}</style></head>
+<body>
+
+  <aio-shell ng-version="6.0.0" class="mode-stable sidenav-open page-tutorial-toh-pt4 folder-tutorial view-SideNav aio-notification-hide "><div id="top-of-page"></div><!----><mat-toolbar class="app-toolbar no-print mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary"><mat-toolbar-row class="notification-container mat-toolbar-row"><aio-notification actionurl="https://bit.ly/angular-survey-2018" buttontext="Go to survey" expirationdate="2018-01-19" icon="insert_comment" iconlabel="Survey" notificationid="survey-january-2018" class="ng-tns-c2-0 ng-trigger ng-trigger-hideAnimation" style="height: 0px;"><a class="content" href="https://bit.ly/angular-survey-2018"><mat-icon class="icon mat-icon" role="img" aria-hidden="true" aria-label="Survey"><svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></mat-icon><span class="message"> Help Angular by taking a <b>1 minute survey</b>! </span><span class="action-button">Go to survey</span></a><button class="close-button mat-icon-button" aria-label="Close" mat-icon-button=""><span class="mat-button-wrapper"><mat-icon aria-label="Dismiss notification" class="mat-icon ng-tns-c2-0" role="img" svgicon="close" aria-hidden="true"><svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></mat-icon></span><div class="mat-button-ripple mat-ripple mat-button-ripple-round" matripple=""></div><div class="mat-button-focus-overlay"></div></button></aio-notification></mat-toolbar-row><mat-toolbar-row class="mat-toolbar-row"><button class="hamburger mat-button" mat-button="" title="Docs menu"><span class="mat-button-wrapper"><mat-icon class="mat-icon" role="img" svgicon="menu" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></mat-icon></span><div class="mat-button-ripple mat-ripple" matripple=""></div><div class="mat-button-focus-overlay"></div></button><a class="nav-link home" href="https://angular.cn/"><!----><img alt="Home" height="40" src="./Angular - 服务_files/logo-nav@2x.png" title="Home" width="150" class="ng-star-inserted"><!----></a><!----><aio-top-menu class="ng-star-inserted"><ul role="navigation"><!----><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/features" title="特性">特性</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/docs" title="文档">文档</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/resources" title="资源">资源</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/events" title="会议">会议</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://blog.angular.io/" title="博客">博客</a></li><li class="ng-star-inserted"><a class="nav-link" href="https://angular.cn/translations/cn/home" title="关于中文版">关于中文版</a></li></ul></aio-top-menu><aio-search-box class="search-container"><input aria-label="search" placeholder="搜索" type="search"></aio-search-box></mat-toolbar-row></mat-toolbar><!----><mat-sidenav-container class="sidenav-container mat-drawer-container mat-sidenav-container mat-drawer-transition has-floating-toc" role="main"><!----><div class="mat-drawer-backdrop ng-star-inserted"></div><div tabindex="-1" class="cdk-visually-hidden cdk-focus-trap-anchor"></div><mat-sidenav class="sidenav mat-drawer mat-sidenav ng-tns-c6-1 ng-trigger ng-trigger-transform mat-drawer-side ng-star-inserted" tabindex="-1" style="transform: translate3d(0px, 0px, 0px); visibility: visible;"><!----><aio-nav-menu><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-1 collapsed" href="https://angular.cn/guide/quickstart" title="Angular 破冰"> 快速上手 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-1 expanded selected" type="button" title="此《英雄指南》教程会带你用 TypeScript 一步步创建一个 Angular 应用。" aria-pressed="true"> 教程 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-1 expanded selected"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/tutorial" title="第一部分：《英雄指南》教程简介"> 1. 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/tutorial/toh-pt0" title="第二部分：创建应用的外壳"> 2. 应用的“外壳” </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/tutorial/toh-pt1" title="第三部分：构建一个简单的英雄编辑器"> 3. 英雄编辑器 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/tutorial/toh-pt2" title="第四部分：构建一个主从结构的页面，用于展现英雄列表"> 4. 显示英雄列表 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded" href="https://angular.cn/tutorial/toh-pt3" title="第五部分：把主从结构的页面重构成多个组件"> 5. 主从组件 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 expanded selected" href="https://angular.cn/tutorial/toh-pt4" title="第六部分：创建一个可复用的服务来管理英雄数据"> 6. 服务 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt5" title="第七部分：添加 Angular 路由器，并且学习在视图之间导航"> 7. 路由 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/tutorial/toh-pt6" title="第八部分：通过 HTTP 来获取并保存英雄数据"> 8. HTTP </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-1 collapsed" type="button" title="学习 Angular 的核心知识" aria-pressed="false"> 核心知识 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-1 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 应用的基本构造块。" aria-pressed="false"> 架构 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture" title="Angular 应用的基本构造块"> 架构概览 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-modules" title="关于模块。"> 模块（NgModule）简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-components" title="关于组件、模板和视图。"> 组件简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-services" title="关于服务与依赖注入。"> 服务与 DI 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/architecture-next-steps" title="学完基础知识之后……"> 后续步骤 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="使用数据绑定构建动态视图" aria-pressed="false"> 组件与模板 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/displaying-data" title="属性绑定可以帮助应用把数据显示在界面上"> 显示数据 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/template-syntax" title="学习如何写模板，以便借助数据绑定机制显示数据并响应事件。"> 模板语法 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/lifecycle-hooks" title="Angular 调用指令和组件的生命周期钩子函数，包括它的创建、变更和销毁时。"> 生命周期钩子 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/component-interaction" title="在不同的指令和组件之间共享信息"> 组件交互 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/component-styles" title="添加专属于某个组件的样式"> 组件样式 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/elements" title="把组件转换成自定义元素。"> Angular 自定义元素 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dynamic-component-loader" title="动态加载组件"> 动态组件 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/attribute-directives" title="属性型指令把行为添加到现有元素上。"> 属性型指令 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/structural-directives" title="结构型指令可以操纵页面的布局"> 结构型指令 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/pipes" title="管道可以在模板中转换显示的内容。"> 管道 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/animations" title="Angular 动画体系指南"> 动画 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 的表单" aria-pressed="false"> 表单 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/user-input" title="用户输入触发 DOM 事件。我们通过事件绑定来监听它们，把更新过的数据导入回我们的组件和 model。"> 用户输入 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/forms" title="表单可以创建集中、高效、引人注目的输入体验。Angular 表单可以协调一组数据绑定控件，跟踪变更，验证输入，并表达错误信息。"> 模板驱动表单 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/form-validation" title="验证用户的表单输入"> 表单验证 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/reactive-forms" title="使用 FormBuilder 、分组和数组创建响应式表单。"> 响应式表单 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dynamic-form" title="使用FormGroup渲染动态表单"> 动态表单 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Observable 与 RxJS" aria-pressed="false"> Observable 与 RxJS <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/observables" title=""> 可观察对象(Observable) </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/rx-library" title=""> RxJS 库 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/observables-in-angular" title=""> Angular 中的可观察对象 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/practical-observable-usage" title=""> 用法实战 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/comparing-observables" title=""> 与其它技术的比较 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/bootstrapping" title="在应用的根模块（AppModule）中告诉 Angular 如何构造并引导引用。"> 引导启动 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 中的模块" aria-pressed="false"> Angular 模块 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/ngmodules" title="使用 NgModule 让你的应用更高效"> NgModule 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/ngmodule-vs-jsmodule" title="JavaScript 模块和 NgModule 之间的差异"> JS 模块 vs NgModule </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/frequent-ngmodules" title="介绍最常用的 Angular 模块"> 常用模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/module-types" title="介绍特性模块的几种类型"> 特性模块的分类 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/entry-components" title="关于 Angular 中入口组件的一切"> 入口组件 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/feature-modules" title="创建特性模块，以组织你的代码"> 特性模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/providers" title="服务提供商与 Angular 模块"> 服务提供商 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/singleton-services" title="创建单例应用"> 单例应用 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/lazy-loading-ngmodules" title="惰性加载模块，以提高应用的性能"> 惰性加载的特性模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/sharing-ngmodules" title="共享 Angular 模块让你的应用现代化。"> 共享 Angular 模块 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/ngmodule-api" title="理解 NgModule 的那些细节。"> NgModule API </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/ngmodule-faq" title="回答关于 NgModules 的常见问题。"> NgModule 常见问题 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="依赖注入：创建并注入各种服务。" aria-pressed="false"> 依赖注入 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dependency-injection-pattern" title="学习 Angular 依赖注入系统背后的依赖注入模式"> 依赖注入模式 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dependency-injection" title="Angular 的依赖注入系统能够为 Angular 创建的类创建并交付它们所依赖的服务。"> Angular 依赖注入 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/hierarchical-dependency-injection" title="Angular 的多级注入体系会建立与组件平行的注入器树。"> 多级注入器 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/dependency-injection-in-action" title="依赖注入的使用技巧"> DI 实用技巧 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/http" title="通过 HTTP 协议与远程服务器对话。"> HttpClient </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/router" title="揭示如何通过 Angular 路由进行基本的屏幕导航。"> 路由与导航 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/testing" title="测试 Angular 应用的技巧与实践。"> 测试 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/cheatsheet" title="关于 Angular 常用编码技术的快速指南。"> 速查表 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-1 collapsed" type="button" title="把 Angular 用到你的实际工作中的一些技巧" aria-pressed="false"> 其它技术 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-1 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/i18n" title="把应用模板中的文本翻译成多种语言。"> 国际化 (i18n) </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/language-service" title="使用 Angular 语言服务来为开发提速。"> 语言服务 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/security" title="Angular 应用开发中的安全技术。"> 安全 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="环境准备与部署" aria-pressed="false"> 环境准备与部署 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/setup" title="在你自己的机器上安装 Angular QuickStart 种子，以便更快、更高效的开发。"> 搭建本地开发环境 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/setup-systemjs-anatomy" title="基于 SystemJS 的本地开发环境内幕。"> 搭建方式剖析 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/browser-support" title="浏览器支持与 Polyfills 指南"> 浏览器支持 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/npm-packages" title="建议的 npm 包，以及如何指定包的依赖。"> npm 包 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/typescript-configuration" title="给 Angular 开发者的 TypeScript 配置。"> TypeScript 配置 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/aot-compiler" title="学习如何使用 AOT 预编译器。"> 预先（AOT）编译 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/deployment" title="学习如何部署你的 Angular 应用。"> 部署 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/custom-elements" title="把 Angular 组件用作自定义元素。"> 自定义元素 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 的 Service Worker：控制应用的资源缓存。" aria-pressed="false"> Service Worker <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-intro" title="Angular 对 Service Worker 的实现提升了慢速或不稳定的网络连接下的用户体验。"> 简介 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-getting-started" title="在 CLI 项目中启用 Service Worker，并在浏览器中查看效果。"> 快速起步 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-communications" title="那些能让你和 Angular 的 Service Worker 通讯的服务类。"> 与 Service Worker 通讯 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-devops" title="使用 Service Worker 运行应用、管理应用更新、调试以及杀掉正在运行的应用。"> 生产环境下的 Service Worker </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/service-worker-config" title="配置 Service Worker 的缓存行为。"> Service Worker 配置 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="Angular 的发布实践，更新计划以及与更新有关的资源。" aria-pressed="false"> 保持最新 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/updating" title="关于如何把 Angular 应用升级到最新版的信息。"> 更新你的项目 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/releases" title="Angular 的版本、发布、支持与弃用策略。"> Angular 的版本发布 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><!----><div class="ng-star-inserted"><!----><!----><button class="vertical-menu-item heading ng-star-inserted level-2 collapsed" type="button" title="把 AngularJS 应用增量式的升级到 Angular。" aria-pressed="false"> 从 AngularJS 升级 <mat-icon class="rotating-icon mat-icon" role="img" svgicon="keyboard_arrow_right" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></mat-icon></button><div class="heading-children level-2 collapsed"><!----><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/upgrade" title="把 AngularJS 应用增量式的升级到 Angular。"> 升级步骤 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-3 collapsed" href="https://angular.cn/guide/ajs-quick-reference" title="学习如何把 AngularJS 的概念映射到 Angular 中。"> AngularJS 与 Angular 的概念对照 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/universal" title="使用 Angular Universal 在服务端渲染 HTML。">  服务端渲染 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/visual-studio-2015" title="在 Visual Studio 2015 中使用快速起步中的文件"> Visual Studio 2015 快速上手 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/styleguide" title="写出 Angular 风格的程序"> 风格指南 </a></div><!----></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-2 collapsed" href="https://angular.cn/guide/glossary" title="Angular 中最重要的词汇的简要定义。"> 词汇表 </a></div><!----></aio-nav-item></div></div></aio-nav-item><aio-nav-item class="ng-star-inserted"><!----><div class="ng-star-inserted"><a class="vertical-menu-item level-1 collapsed" href="https://angular.cn/api" title="关于 Angular 中类和值的详细信息。"> API 参考手册 </a></div><!----></aio-nav-item></aio-nav-menu><div class="doc-version"><aio-select><div class="form-select-menu"><button class="form-select-button"><strong></strong><!---->stable (v6.0.0) </button><!----></div></aio-select></div></mat-sidenav><div tabindex="-1" class="cdk-visually-hidden cdk-focus-trap-anchor"></div><!----><mat-sidenav-content cdkscrollable="" class="mat-drawer-content mat-sidenav-content ng-star-inserted" style="margin-left: 262px; margin-right: 0px;"><section class="sidenav-content" role="content" id="tutorial-toh-pt4"><aio-mode-banner><!----></aio-mode-banner><aio-doc-viewer class=""><div style="opacity: 1; transition: all 200ms ease-in-out;">
+<div class="content">
+<h1 translation-result="" id="services-1">服务<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#services-1"><i class="material-icons">link</i></a></h1><aio-toc class="embedded"></aio-toc><h1 translation-origin="off" id="services">Services<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#services"><i class="material-icons">link</i></a></h1>
+
+<p translation-result="">英雄指南的 <code>HeroesComponent</code> 目前获取和显示的都是模拟数据。</p><p translation-origin="off">The Tour of Heroes <code>HeroesComponent</code> is currently getting and displaying fake data.</p>
+
+<p translation-result="">本节课的重构完成之后，<code>HeroesComponent</code> 变得更精简，并且聚焦于为它的视图提供支持。这也让它更容易使用模拟服务进行单元测试。</p><p translation-origin="off">After the refactoring in this tutorial, <code>HeroesComponent</code> will be lean and focused on supporting the view.
+It will also be easier to unit-test with a mock service.</p>
+
+<h2 translation-result="" id="why-services">为什么需要服务<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#why-services"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="why-services">Why services<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#why-services"><i class="material-icons">link</i></a></h2>
+
+<p translation-result="">组件不应该直接获取或保存数据，它们不应该了解是否在展示假数据。
+它们应该聚焦于展示数据，而把数据访问的职责委托给某个服务。</p><p translation-origin="off">Components shouldn't fetch or save data directly and they certainly shouldn't knowingly present fake data.
+They should focus on presenting data and delegate data access to a service.</p>
+
+<p translation-result="">本节课，你将创建一个 <code>HeroService</code>，应用中的所有类都可以使用它来获取英雄列表。
+不要使用 <code>new</code> 来创建此服务，而要依靠 Angular 的<a href="https://angular.cn/guide/dependency-injection"><em>依赖注入</em></a>机制把它注入到 <code>HeroesComponent</code> 的构造函数中。</p><p translation-origin="off">In this tutorial, you'll create a <code>HeroService</code> that all application classes can use to get heroes.
+Instead of creating that service with <code>new</code>,
+you'll rely on Angular <a href="https://angular.cn/guide/dependency-injection"><em>dependency injection</em></a>
+to inject it into the <code>HeroesComponent</code> constructor.</p>
+
+<p translation-result="">服务是在多个“互相不知道”的类之间共享信息的好办法。
+你将创建一个 <code>MessageService</code>，并且把它注入到两个地方：</p><p translation-origin="off">Services are a great way to share information among classes that <em>don't know each other</em>.
+You'll create a <code>MessageService</code> and inject it in two places:</p>
+
+<ol>
+<li>
+<p translation-result=""><code>HeroService</code> 中，它会使用该服务发送消息。</p><p translation-origin="off">in <code>HeroService</code> which uses the service to send a message.</p>
+
+</li>
+<li>
+<p translation-result=""><code>MessagesComponent</code> 中，它会显示其中的消息。</p><p translation-origin="off">in <code>MessagesComponent</code> which displays that message.</p>
+
+</li>
+</ol>
+<h2 translation-result="" id="create-the-emheroserviceem">创建 <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#create-the-emheroserviceem"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="create-the-heroservice">Create the <em>HeroService</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#create-the-heroservice"><i class="material-icons">link</i></a></h2>
+
+<p translation-result="">使用 Angular CLI 创建一个名叫 <code>hero</code> 的服务。</p><p translation-origin="off">Using the Angular CLI, create a service called <code>hero</code>.</p>
+
+<code-example language="sh" class="code-shell" ng-version="6.0.0"><div style="display: none">
+  ng generate service hero
+</div><!----><aio-code><pre class="prettyprint lang-sh">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">ng generate service hero</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">该命令会在 <code>src/app/hero.service.ts</code> 中生成 <code>HeroService</code> 类的骨架。
+<code>HeroService</code> 类的代码如下：</p><p translation-origin="off">The command generates skeleton <code>HeroService</code> class in <code>src/app/hero.service.ts</code>
+The <code>HeroService</code> class should look like the following example.</p>
+
+<code-example path="toh-pt4/src/app/hero.service.1.ts" region="new" title="src/app/hero.service.ts (new service)" linenums="false" ng-version="6.0.0"><div style="display: none">
+import { <a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a> } from '@angular/core';
+
+@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>({
+  providedIn: 'root',
+})
+export class HeroService {
+
+  constructor() { }
+
+}
+
+</div><!----><header class="ng-star-inserted">src/app/hero.service.ts (new service)</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from src/app/hero.service.ts (new service)">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><a href="https://angular.cn/api/core/Injectable" class="code-anchor"><span class="typ">Injectable</span></a><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'@angular/core'</span><span class="pun">;</span><span class="pln">
+
+</span><span class="lit">@</span><a href="https://angular.cn/api/core/Injectable" class="code-anchor"><span class="lit">Injectable</span></a><span class="pun">({</span><span class="pln">
+  providedIn</span><span class="pun">:</span><span class="pln"> </span><span class="str">'root'</span><span class="pun">,</span><span class="pln">
+</span><span class="pun">})</span><span class="pln">
+</span><span class="kwd">export</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">HeroService</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+  </span><span class="kwd">constructor</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+
+</span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<h3 translation-result="" id="eminjectableem-services"><em>@Injectable()</em> 服务<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#eminjectableem-services"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="injectable-services"><em>@Injectable()</em> services<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#injectable-services"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">注意，这个新的服务导入了 Angular 的 <code><a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a></code> 符号，并且给这个服务类添加了 <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>()</code> 装饰器。
+它把这个类标记为<em>依赖注入系统</em>的参与者之一。<code>HeroService</code> 类将会提供一个可注入的服务，并且它还可以拥有自己的待注入的依赖。
+目前它还没有依赖，但是<a href="https://angular.cn/tutorial/toh-pt4#inject-message-service">很快就会有了</a>。</p><p translation-origin="off">Notice that the new service imports the Angular <code><a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a></code> symbol and annotates
+the class with the <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>()</code> decorator. This marks the class as one that participates in the <em>dependency injection system</em>. The <code>HeroService</code> class is going to provide an injectable service, and it can also have its own injected dependencies.
+It doesn't have any dependencies yet, but <a href="https://angular.cn/tutorial/toh-pt4#inject-message-service">it will soon</a>.</p>
+
+<p translation-result=""><code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>()</code> 装饰器会接受该服务的元数据对象，就像 <code>@<a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a>()</code> 对组件类的作用一样。</p><p translation-origin="off">The <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>()</code> decorator accepts a metadata object for the service, the same way the <code>@<a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a>()</code> decorator did for your component classes. </p>
+
+<h3 translation-result="" id="get-hero-data">获取英雄数据<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#get-hero-data"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="get-hero-data">Get hero data<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#get-hero-data"><i class="material-icons">link</i></a></h3>
+
+<p translation-result=""><code>HeroService</code> 可以从任何地方获取数据：Web 服务、本地存储（LocalStorage）或一个模拟的数据源。</p><p translation-origin="off">The <code>HeroService</code> could get hero data from anywhere—a web service, local storage, or a mock data source. </p>
+
+<p translation-result="">从组件中移除数据访问逻辑，意味着将来任何时候你都可以改变目前的实现方式，而不用改动任何组件。
+这些组件不需要了解该服务的内部实现。</p><p translation-origin="off">Removing data access from components means you can change your mind about the implementation anytime, without touching any components.
+They don't know how the service works.</p>
+
+<p translation-result="">这节课中的实现仍然会提供<em>模拟的英雄列表</em>。</p><p translation-origin="off">The implementation in <em>this</em> tutorial will continue to deliver <em>mock heroes</em>.</p>
+
+<p translation-result="">导入 <code>Hero</code> 和 <code>HEROES</code>。</p><p translation-origin="off">Import the <code>Hero</code> and <code>HEROES</code>.</p>
+
+<code-example path="toh-pt4/src/app/hero.service.ts" region="import-heroes" ng-version="6.0.0"><div style="display: none">
+import { Hero } from './hero';
+import { HEROES } from './mock-heroes';
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">Hero</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'./hero'</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> HEROES </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'./mock-heroes'</span><span class="pun">;</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">添加一个 <code>getHeroes</code> 方法，让它返回<em>模拟的英雄列表</em>。</p><p translation-origin="off">Add a <code>getHeroes</code> method to return the <em>mock heroes</em>.</p>
+
+<code-example path="toh-pt4/src/app/hero.service.1.ts" region="getHeroes" ng-version="6.0.0"><div style="display: none">
+getHeroes(): Hero[] {
+  return HEROES;
+}
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">getHeroes</span><span class="pun">():</span><span class="pln"> </span><span class="typ">Hero</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">return</span><span class="pln"> HEROES</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<a id="provide"></a>
+<h2 translation-result="" id="provide-the-codeheroservicecode">提供（provide） <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#provide-the-codeheroservicecode"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="provide-the-heroservice">Provide the <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#provide-the-heroservice"><i class="material-icons">link</i></a></h2>
+
+<p translation-result="">在要求 Angular 把 <code>HeroService</code> 注入到 <code>HeroesComponent</code> 之前，你必须先把这个服务<em>提供给依赖注入系统</em>。<a href="https://angular.cn/tutorial/toh-pt4#inject">稍后</a>你就要这么做。
+你可以通过注册<em>提供商</em>来做到这一点。提供商用来创建和交付服务，在这个例子中，它会对 <code>HeroService</code> 类进行实例化，以提供该服务。</p><p translation-origin="off">You must make the <code>HeroService</code> available to the dependency injection system
+before Angular can <em>inject</em> it into the <code>HeroesComponent</code>,
+as you will do <a href="https://angular.cn/tutorial/toh-pt4#inject">below</a>. You do this by registering a <em>provider</em>. A provider is something that can create or deliver a service; in this case, it instantiates the <code>HeroService</code> class to provide the service.</p>
+
+<p translation-result="">现在，你需要确保 <code>HeroService</code> 已经作为该服务的提供商进行过注册。
+你要用一个<em>注入器</em>注册它。注入器就是一个对象，负责在需要时选取和注入该提供商。</p><p translation-origin="off">Now, you need to make sure that the <code>HeroService</code> is registered as the provider of this service.
+You are registering it with an <em>injector</em>, which is the object that is responsible for choosing and injecting the provider where it is required. </p>
+
+<p translation-result="">默认情况下，Angular CLI 命令 <code>ng generate service</code> 会通过给 <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a></code> 装饰器添加元数据的形式，为该服务把提供商注册到<em>根注入器</em>上。</p><p translation-origin="off">By default, the Angular CLI command <code>ng generate service</code> registers a provider with the <em>root injector</em> for your service by including provider metadata in the <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a></code> decorator. </p>
+
+<p translation-result="">如果你看看 <code>HeroService</code> 紧前面的 <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>()</code> 语句定义，就会发现 <code>providedIn</code> 元数据的值是 'root'：</p><p translation-origin="off">If you look at the <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>()</code> statement right before the <code>HeroService</code> class definition, you can see that the <code>providedIn</code> metadata value is 'root':    </p>
+
+<code-example ng-version="6.0.0"><div style="display: none">
+@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>({
+  providedIn: 'root',
+})
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="lit">@</span><a href="https://angular.cn/api/core/Injectable" class="code-anchor"><span class="lit">Injectable</span></a><span class="pun">({</span><span class="pln">
+  providedIn</span><span class="pun">:</span><span class="pln"> </span><span class="str">'root'</span><span class="pun">,</span><span class="pln">
+</span><span class="pun">})</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">当你在顶层提供该服务时，Angular 就会为 <code>HeroService</code> 创建一个单一的、共享的实例，并把它注入到任何想要它的类上。
+在 <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a></code> 元数据中注册该提供商，还能让 Angular 可以通过移除那些完全没有用过的服务，来进行优化。</p><p translation-origin="off">When you provide the service at the root level, Angular creates a single, shared instance of <code>HeroService</code> and injects into any class that asks for it.
+Registering the provider in the <code>@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a></code> metadata also allows Angular to optimize an app by removing the service if it turns out not to be used after all. </p>
+
+<div class="l-sub-section">
+<p translation-result="">如果需要，你也可以在不同的层次上注册提供商 —— 在 <code>HeroesComponent</code> 中、在 <code>AppComponent</code> 中，或在 <code>AppModule</code> 中。
+比如，你可以通过附加 <code>--module=app</code> 参数来告诉 CLI 要自动在模块级提供该服务。</p><p translation-origin="off">If you need to, you can register providers at different levels:
+in the <code>HeroesComponent</code>, in the <code>AppComponent</code>, in the <code>AppModule</code>.
+For instance, you could have told the CLI to provide the service at the module level automatically by appending <code>--module=app</code>.</p>
+
+<code-example language="sh" class="code-shell" ng-version="6.0.0"><div style="display: none">
+  ng generate service hero --module=app
+</div><!----><aio-code><pre class="prettyprint lang-sh">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">ng generate service hero </span><span class="pun">--</span><span class="pln">module</span><span class="pun">=</span><span class="pln">app</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">要了解更多，参见<a href="https://angular.cn/guide/dependency-injection">依赖注入指南</a>。</p><p translation-origin="off">To learn more about providers and injectors, see the <a href="https://angular.cn/guide/dependency-injection">Dependency Injection guide</a>.</p>
+
+</div>
+<p translation-result="">现在 <code>HeroService</code> 已经准备好插入到 <code>HeroesComponent</code> 中了。</p><p translation-origin="off">The <code>HeroService</code> is now ready to plug into the <code>HeroesComponent</code>.</p>
+
+<div class="alert is-important">
+<p translation-result="">这是一个过渡性的代码范例，它将会允许你提供并使用 <code>HeroService</code>。此刻的代码和<a href="https://angular.cn/tutorial/toh-pt4#final-code-review">最终代码</a>相差很大。</p><p translation-origin="off">This is a interim code sample that will allow you to provide and use the <code>HeroService</code>.  At this point, the code will differ from the <code>HeroService</code> in the <a href="https://angular.cn/tutorial/toh-pt4#final-code-review">"final code review"</a>.</p>
+
+</div>
+<h2 translation-result="" id="update-codeheroescomponentcode">修改 <code>HeroesComponent</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#update-codeheroescomponentcode"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="update-heroescomponent">Update <code>HeroesComponent</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#update-heroescomponent"><i class="material-icons">link</i></a></h2>
+
+<p translation-result="">打开 <code>HeroesComponent</code> 类文件。</p><p translation-origin="off">Open the <code>HeroesComponent</code> class file.</p>
+
+<p translation-result="">删除 <code>HEROES</code> 的导入语句，因为你以后不会再用它了。
+转而导入 <code>HeroService</code>。</p><p translation-origin="off">Delete the <code>HEROES</code> import, because you won't need that anymore.
+Import the <code>HeroService</code> instead.</p>
+
+<code-example path="toh-pt4/src/app/heroes/heroes.component.ts" title="src/app/heroes/heroes.component.ts (import HeroService)" region="hero-service-import" ng-version="6.0.0"><div style="display: none">
+import { HeroService } from '../hero.service';
+
+</div><!----><header class="ng-star-inserted">src/app/heroes/heroes.component.ts (import HeroService)</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from src/app/heroes/heroes.component.ts (import HeroService)">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">HeroService</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'../hero.service'</span><span class="pun">;</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">把 <code>heroes</code> 属性的定义改为一句简单的声明。</p><p translation-origin="off">Replace the definition of the <code>heroes</code> property with a simple declaration.</p>
+
+<code-example path="toh-pt4/src/app/heroes/heroes.component.ts" region="heroes" ng-version="6.0.0"><div style="display: none">
+heroes: Hero[];
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">heroes</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Hero</span><span class="pun">[];</span></code>
+    </pre></aio-code></code-example>
+<a id="inject"></a>
+<h3 translation-result="" id="inject-the-codeheroservicecode">注入 <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#inject-the-codeheroservicecode"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="inject-the-heroservice">Inject the <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#inject-the-heroservice"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">往构造函数中添加一个私有的 <code>heroService</code>，其类型为 <code>HeroService</code>。</p><p translation-origin="off">Add a private <code>heroService</code> parameter of type <code>HeroService</code> to the constructor.</p>
+
+<code-example path="toh-pt4/src/app/heroes/heroes.component.ts" region="ctor" ng-version="6.0.0"><div style="display: none">
+constructor(private heroService: HeroService) { }
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">constructor</span><span class="pun">(</span><span class="kwd">private</span><span class="pln"> heroService</span><span class="pun">:</span><span class="pln"> </span><span class="typ">HeroService</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">这个参数同时做了两件事：1. 声明了一个私有 <code>heroService</code> 属性，2. 把它标记为一个 <code>HeroService</code> 的注入点。</p><p translation-origin="off">The parameter simultaneously defines a private <code>heroService</code> property and identifies it as a <code>HeroService</code> injection site.</p>
+
+<p translation-result="">当 Angular 创建 <code>HeroesComponent</code> 时，<a href="https://angular.cn/guide/dependency-injection">依赖注入</a>系统就会把这个 <code>heroService</code> 参数设置为 <code>HeroService</code> 的单例对象。</p><p translation-origin="off">When Angular creates a <code>HeroesComponent</code>, the <a href="https://angular.cn/guide/dependency-injection">Dependency Injection</a> system
+sets the <code>heroService</code> parameter to the singleton instance of <code>HeroService</code>. </p>
+
+<h3 translation-result="" id="add-emgetheroesem">添加 <em>getHeroes()</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#add-emgetheroesem"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="add-getheroes">Add <em>getHeroes()</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#add-getheroes"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">创建一个函数，以从服务中获取这些英雄数据。</p><p translation-origin="off">Create a function to retrieve the heroes from the service.</p>
+
+<code-example path="toh-pt4/src/app/heroes/heroes.component.1.ts" region="getHeroes" ng-version="6.0.0"><div style="display: none">
+getHeroes(): void {
+  this.heroes = this.heroService.getHeroes();
+}
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">getHeroes</span><span class="pun">():</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">heroes </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">heroService</span><span class="pun">.</span><span class="pln">getHeroes</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<a id="oninit"></a>
+<h3 translation-result="" id="call-it-in-codengoninitcode">在 <code>ngOnInit</code> 中调用它<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#call-it-in-codengoninitcode"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="call-it-in-ngoninit">Call it in <code>ngOnInit</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#call-it-in-ngoninit"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">你固然可以在构造函数中调用 <code>getHeroes()</code>，但那不是最佳实践。</p><p translation-origin="off">While you could call <code>getHeroes()</code> in the constructor, that's not the best practice.</p>
+
+<p translation-result="">让构造函数保持简单，只做初始化操作，比如把构造函数的参数赋值给属性。
+构造函数不应该<em>做任何事</em>。
+它肯定不能调用某个函数来向远端服务（比如真实的数据服务）发起 HTTP 请求。</p><p translation-origin="off">Reserve the constructor for simple initialization such as wiring constructor parameters to properties.
+The constructor shouldn't <em>do anything</em>.
+It certainly shouldn't call a function that makes HTTP requests to a remote server as a <em>real</em> data service would.</p>
+
+<p translation-result="">你应该改为在 <a href="https://angular.cn/guide/lifecycle-hooks"><em>ngOnInit 生命周期钩子</em></a>中调用 <code>getHeroes()</code>，并且等 Angular 构造出 <code>HeroesComponent</code> 的实例之后，找个恰当的时机调用 <code>ngOnInit</code>。</p><p translation-origin="off">Instead, call <code>getHeroes()</code> inside the <a href="https://angular.cn/guide/lifecycle-hooks"><em>ngOnInit lifecycle hook</em></a> and
+let Angular call <code>ngOnInit</code> at an appropriate time <em>after</em> constructing a <code>HeroesComponent</code> instance.</p>
+
+<code-example path="toh-pt4/src/app/heroes/heroes.component.ts" region="ng-on-init" ng-version="6.0.0"><div style="display: none">
+ngOnInit() {
+  this.getHeroes();
+}
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">ngOnInit</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">getHeroes</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<h3 translation-result="" id="see-it-run">查看运行效果<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#see-it-run"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="see-it-run">See it run<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#see-it-run"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">刷新浏览器，该应用仍运行的一如既往。
+显示英雄列表，并且当你点击某个英雄的名字时显示出英雄详情视图。</p><p translation-origin="off">After the browser refreshes, the app should run as before,
+showing a list of heroes and a hero detail view when you click on a hero name.</p>
+
+<h2 translation-result="" id="observable-data">可观察（Observable）的数据<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#observable-data"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="observable-data">Observable data<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#observable-data"><i class="material-icons">link</i></a></h2>
+
+<p translation-result=""><code>HeroService.getHeroes()</code> 的函数签名是<em>同步的</em>，它所隐含的假设是 <code>HeroService</code> 总是能同步获取英雄列表数据。
+而 <code>HeroesComponent</code> 也同样假设能同步取到 <code>getHeroes()</code> 的结果。</p><p translation-origin="off">The <code>HeroService.getHeroes()</code> method has a <em>synchronous signature</em>,
+which implies that the <code>HeroService</code> can fetch heroes synchronously.
+The <code>HeroesComponent</code> consumes the <code>getHeroes()</code> result
+as if heroes could be fetched synchronously.</p>
+
+<code-example path="toh-pt4/src/app/heroes/heroes.component.1.ts" region="get-heroes" ng-version="6.0.0"><div style="display: none">
+this.heroes = this.heroService.getHeroes();
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">this</span><span class="pun">.</span><span class="pln">heroes </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">heroService</span><span class="pun">.</span><span class="pln">getHeroes</span><span class="pun">();</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">这在真实的应用中几乎是不可能的。
+现在能这么做，只是因为目前该服务返回的是<em>模拟数据</em>。
+不过很快，该应用就要从远端服务器获取英雄数据了，而那天生就是<em>异步</em>操作。</p><p translation-origin="off">This will not work in a real app.
+You're getting away with it now because the service currently returns <em>mock heroes</em>.
+But soon the app will fetch heroes from a remote server,
+which is an inherently <em>asynchronous</em> operation.</p>
+
+<p translation-result=""><code>HeroService</code> 必须等服务器给出相应，
+而 <code>getHeroes()</code> 不能立即返回英雄数据，
+浏览器也不会在该服务等待期间停止响应。</p><p translation-origin="off">The <code>HeroService</code> must wait for the server to respond,
+<code>getHeroes()</code> cannot return immediately with hero data,
+and the browser will not block while the service waits.</p>
+
+<p translation-result=""><code>HeroService.getHeroes()</code> 必须具有某种形式的<em>异步函数签名</em>。</p><p translation-origin="off"><code>HeroService.getHeroes()</code> must have an <em>asynchronous signature</em> of some kind.</p>
+
+<p translation-result="">它可以使用回调函数，可以返回 <code>Promise</code>（承诺），也可以返回 <code>Observable</code>（可观察对象）。</p><p translation-origin="off">It can take a callback. It could return a <code>Promise</code>. It could return an <code>Observable</code>.</p>
+
+<p translation-result="">这节课，<code>HeroService.getHeroes()</code> 将会返回 <code>Observable</code>，因为它最终会使用 Angular 的 <code>HttpClient.get</code> 方法来获取英雄数据，而 <a href="https://angular.cn/guide/http"><code>HttpClient.get()</code> 会返回 <code>Observable</code></a>。</p><p translation-origin="off">In this tutorial, <code>HeroService.getHeroes()</code> will return an <code>Observable</code>
+in part because it will eventually use the Angular <code>HttpClient.get</code> method to fetch the heroes
+and <a href="https://angular.cn/guide/http"><code>HttpClient.get()</code> returns an <code>Observable</code></a>.</p>
+
+<h3 translation-result="" id="observable-emheroserviceem">可观察对象版本的 <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#observable-emheroserviceem"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="observable-heroservice">Observable <em>HeroService</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#observable-heroservice"><i class="material-icons">link</i></a></h3>
+
+<p translation-result=""><code>Observable</code> 是 <a href="http://reactivex.io/rxjs/">RxJS 库</a>中的一个关键类。</p><p translation-origin="off"><code>Observable</code> is one of the key classes in the <a href="http://reactivex.io/rxjs/">RxJS library</a>.</p>
+
+<p translation-result="">在<a href="https://angular.cn/tutorial/toh-pt6">稍后的 HTTP 教程</a>中，你就会知道 Angular <code><a href="https://angular.cn/api/common/http/HttpClient" class="code-anchor">HttpClient</a></code> 的方法会返回 RxJS 的 <code>Observable</code>。
+这节课，你将使用 RxJS 的 <code>of()</code> 函数来模拟从服务器返回数据。</p><p translation-origin="off">In a <a href="https://angular.cn/tutorial/toh-pt6">later tutorial on HTTP</a>, you'll learn that Angular's <code><a href="https://angular.cn/api/common/http/HttpClient" class="code-anchor">HttpClient</a></code> methods return RxJS <code>Observable</code>s.
+In this tutorial, you'll simulate getting data from the server with the RxJS <code>of()</code> function.</p>
+
+<p translation-result="">打开 <code>HeroService</code> 文件，并从 RxJS 中导入 <code>Observable</code> 和 <code>of</code> 符号。</p><p translation-origin="off">Open the <code>HeroService</code> file and import the <code>Observable</code> and <code>of</code> symbols from RxJS.</p>
+
+<code-example path="toh-pt4/src/app/hero.service.ts" title="src/app/hero.service.ts (Observable imports)" region="import-observable" ng-version="6.0.0"><div style="display: none">
+import { Observable, of } from 'rxjs';
+
+</div><!----><header class="ng-star-inserted">src/app/hero.service.ts (Observable imports)</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from src/app/hero.service.ts (Observable imports)">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">Observable</span><span class="pun">,</span><span class="pln"> of </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'rxjs'</span><span class="pun">;</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">把 <code>getHeroes</code> 方法改成这样：</p><p translation-origin="off">Replace the <code>getHeroes</code> method with this one.</p>
+
+<code-example path="toh-pt4/src/app/hero.service.ts" region="getHeroes-1" ng-version="6.0.0"><div style="display: none">
+getHeroes(): Observable&lt;Hero[]&gt; {
+  return of(HEROES);
+}
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">getHeroes</span><span class="pun">():</span><span class="pln"> </span><span class="typ">Observable</span><span class="pun">&lt;</span><span class="typ">Hero</span><span class="pun">[]&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">return</span><span class="pln"> of</span><span class="pun">(</span><span class="pln">HEROES</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<p translation-result=""><code>of(HEROES)</code> 会返回一个  <code>Observable&lt;Hero[]&gt;</code>，它会发出单个值，这个值就是这些模拟英雄的数组。</p><p translation-origin="off"><code>of(HEROES)</code> returns an <code>Observable&lt;Hero[]&gt;</code> that emits  <em>a single value</em>, the array of mock heroes.</p>
+
+<div class="l-sub-section">
+<p translation-result="">在 <a href="https://angular.cn/tutorial/toh-pt6">HTTP 教程</a>中，你将会调用 <code>HttpClient.get&lt;Hero[]&gt;()</code> 它也同样返回一个 <code>Observable&lt;Hero[]&gt;</code>，它也会发出单个值，这个值就是来自 HTTP 响应体中的英雄数组。</p><p translation-origin="off">In the <a href="https://angular.cn/tutorial/toh-pt6">HTTP tutorial</a>, you'll call <code>HttpClient.get&lt;Hero[]&gt;()</code> which also returns an <code>Observable&lt;Hero[]&gt;</code> that emits  <em>a single value</em>, an array of heroes from the body of the HTTP response.</p>
+
+</div>
+<h3 translation-result="" id="subscribe-in-emheroescomponentem">在 <code>HeroesComponent</code> 中订阅<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#subscribe-in-emheroescomponentem"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="subscribe-in-heroescomponent">Subscribe in <em>HeroesComponent</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#subscribe-in-heroescomponent"><i class="material-icons">link</i></a></h3>
+
+<p translation-result=""><code>HeroService.getHeroes</code> 方法之前返回一个 <code>Hero[]</code>，
+现在它返回的是 <code>Observable&lt;Hero[]&gt;</code>。</p><p translation-origin="off">The <code>HeroService.getHeroes</code> method used to return a <code>Hero[]</code>.
+Now it returns an <code>Observable&lt;Hero[]&gt;</code>.</p>
+
+<p translation-result="">你必须在 <code>HeroesComponent</code> 中也向本服务中的这种形式看齐。</p><p translation-origin="off">You'll have to adjust to that difference in <code>HeroesComponent</code>.</p>
+
+<p translation-result="">找到 <code>getHeroes</code> 方法，并且把它替换为如下代码（和前一个版本对比显示）：</p><p translation-origin="off">Find the <code>getHeroes</code> method and replace it with the following code
+(shown side-by-side with the previous version for comparison)</p>
+
+<code-tabs ng-version="6.0.0"><div style="display: none">
+
+  <code-pane title="heroes.component.ts (Observable)" path="toh-pt4/src/app/heroes/heroes.component.ts" region="getHeroes">
+getHeroes(): void {
+  this.heroService.getHeroes()
+      .subscribe(heroes =&gt; this.heroes = heroes);
+}
+
+</code-pane>
+
+  <code-pane title="heroes.component.ts (Original)" path="toh-pt4/src/app/heroes/heroes.component.1.ts" region="getHeroes">
+getHeroes(): void {
+  this.heroes = this.heroService.getHeroes();
+}
+
+</code-pane>
+
+</div><mat-tab-group class="code-tab-group mat-tab-group mat-primary" disableripple=""><mat-tab-header class="mat-tab-header"><div aria-hidden="true" class="mat-tab-header-pagination mat-tab-header-pagination-before mat-elevation-z4 mat-ripple mat-tab-header-pagination-disabled" mat-ripple=""><div class="mat-tab-header-pagination-chevron"></div></div><div class="mat-tab-label-container"><div class="mat-tab-list" role="tablist" style="transform: translate3d(0px, 0px, 0px);"><div class="mat-tab-labels"><!----><div class="mat-tab-label mat-ripple mat-tab-label-active ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-4-0" tabindex="0" aria-controls="mat-tab-content-4-0" aria-selected="true"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">heroes.component.ts (Observable)</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-4-1" tabindex="-1" aria-controls="mat-tab-content-4-1" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">heroes.component.ts (Original)</span><!----><!----></div></div></div><mat-ink-bar class="mat-ink-bar" style="visibility: visible; left: 0px; width: 263px;"></mat-ink-bar></div></div><div aria-hidden="true" class="mat-tab-header-pagination mat-tab-header-pagination-after mat-elevation-z4 mat-ripple mat-tab-header-pagination-disabled" mat-ripple=""><div class="mat-tab-header-pagination-chevron"></div></div></mat-tab-header><div class="mat-tab-body-wrapper"><!----><mat-tab-body class="mat-tab-body ng-tns-c10-17 mat-tab-body-active ng-star-inserted" role="tabpanel" id="mat-tab-content-4-0" aria-labelledby="mat-tab-label-4-0"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: none;"><!----><!----><aio-code class="ng-star-inserted" style=""><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from heroes.component.ts (Observable)">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">getHeroes</span><span class="pun">():</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">heroService</span><span class="pun">.</span><span class="pln">getHeroes</span><span class="pun">()</span><span class="pln">
+      </span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">heroes </span><span class="pun">=&gt;</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">heroes </span><span class="pun">=</span><span class="pln"> heroes</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code>
+    </pre></aio-code><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-18 ng-star-inserted" role="tabpanel" id="mat-tab-content-4-1" aria-labelledby="mat-tab-label-4-1"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body></div></mat-tab-group></code-tabs>
+<p translation-result=""><code>Observable.subscribe()</code> 是关键的差异点。</p><p translation-origin="off"><code>Observable.subscribe()</code> is the critical difference.</p>
+
+<p translation-result="">上一个版本把英雄的数组赋值给了该组件的 <code>heroes</code> 属性。
+这种赋值是<em>同步</em>的，这里包含的假设是服务器能立即返回英雄数组或者浏览器能在等待服务器响应时冻结界面。</p><p translation-origin="off">The previous version assigns an array of heroes to the component's <code>heroes</code> property.
+The assignment occurs <em>synchronously</em>, as if the server could return heroes instantly
+or the browser could freeze the UI while it waited for the server's response.</p>
+
+<p translation-result="">当 <code>HeroService</code> 真的向远端服务器发起请求时，这种方式就行不通了。</p><p translation-origin="off">That <em>won't work</em> when the <code>HeroService</code> is actually making requests of a remote server.</p>
+
+<p translation-result="">新的版本等待 <code>Observable</code> 发出这个英雄数组，这可能立即发生，也可能会在几分钟之后。
+然后，<code>subscribe</code> 函数把这个英雄数组传给这个回调函数，该函数把英雄数组赋值给组件的 <code>heroes</code> 属性。</p><p translation-origin="off">The new version waits for the <code>Observable</code> to emit the array of heroes—
+which could happen now or several minutes from now.
+Then <code>subscribe</code> passes the emitted array to the callback,
+which sets the component's <code>heroes</code> property.</p>
+
+<p translation-result="">使用这种异步方式，当 <code>HeroService</code> 从远端服务器获取英雄数据时，就<em>可以工作了</em>。</p><p translation-origin="off">This asynchronous approach <em>will work</em> when
+the <code>HeroService</code> requests heroes from the server.</p>
+
+<h2 translation-result="" id="show-messages">显示消息<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#show-messages"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="show-messages">Show messages<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#show-messages"><i class="material-icons">link</i></a></h2>
+
+<p translation-result="">在这一节，你将</p><p translation-origin="off">In this section you will </p>
+
+<ul>
+<li>
+<p translation-result=""> 添加一个 <code>MessagesComponent</code>，它在屏幕的底部显示应用中的消息。</p><p translation-origin="off">add a <code>MessagesComponent</code> that displays app messages at the bottom of the screen.</p>
+
+</li>
+<li>
+<p translation-result=""> 创建一个可注入的、全应用级别的 <code>MessageService</code>，用于发送要显示的消息。</p><p translation-origin="off">create an injectable, app-wide <code>MessageService</code> for sending messages to be displayed</p>
+
+</li>
+<li>
+<p translation-result=""> 把 <code>MessageService</code> 注入到 <code>HeroService</code> 中。</p><p translation-origin="off">inject <code>MessageService</code> into the <code>HeroService</code></p>
+
+</li>
+<li>
+<p translation-result=""> 当 <code>HeroService</code> 成功获取了英雄数据时显示一条消息。</p><p translation-origin="off">display a message when <code>HeroService</code> fetches heroes successfully.</p>
+
+</li>
+</ul>
+<h3 translation-result="" id="create-emmessagescomponentem">创建 <code>MessagesComponent</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#create-emmessagescomponentem"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="create-messagescomponent">Create <em>MessagesComponent</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#create-messagescomponent"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">使用 CLI 创建 <code>MessagesComponent</code>。</p><p translation-origin="off">Use the CLI to create the <code>MessagesComponent</code>.</p>
+
+<code-example language="sh" class="code-shell" ng-version="6.0.0"><div style="display: none">
+  ng generate component messages
+</div><!----><aio-code><pre class="prettyprint lang-sh">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">ng generate component messages</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">CLI 在 <code>src/app/messages</code> 中创建了组件文件，并且把 <code>MessagesComponent</code> 声明在了 <code>AppModule</code> 中。</p><p translation-origin="off">The CLI creates the component files in the <code>src/app/messages</code> folder and declare <code>MessagesComponent</code> in <code>AppModule</code>.</p>
+
+<p translation-result="">修改 <code>AppComponent</code> 的模板来显示所生成的 <code>MessagesComponent</code>：</p><p translation-origin="off">Modify the <code>AppComponent</code> template to display the generated <code>MessagesComponent</code></p>
+
+<code-example title="/src/app/app.component.html" path="toh-pt4/src/app/app.component.html" ng-version="6.0.0"><div style="display: none">
+&lt;h1&gt;{{title}}&lt;/h1&gt;
+&lt;app-heroes&gt;&lt;/app-heroes&gt;
+&lt;app-messages&gt;&lt;/app-messages&gt;
+
+
+</div><!----><header class="ng-star-inserted">/src/app/app.component.html</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from /src/app/app.component.html">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="tag">&lt;h1&gt;</span><span class="pln">{{title}}</span><span class="tag">&lt;/h1&gt;</span><span class="pln">
+</span><span class="tag">&lt;app-heroes&gt;&lt;/app-heroes&gt;</span><span class="pln">
+</span><span class="tag">&lt;app-messages&gt;&lt;/app-messages&gt;</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">你可以在页面的底部看到来自的 <code>MessagesComponent</code> 的默认内容。</p><p translation-origin="off">You should see the default paragraph from <code>MessagesComponent</code> at the bottom of the page.</p>
+
+<h3 translation-result="" id="create-the-emmessageserviceem">创建 <code>MessageService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#create-the-emmessageserviceem"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="create-the-messageservice">Create the <em>MessageService</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#create-the-messageservice"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">使用 CLI 在 <code>src/app</code> 中创建 <code>MessageService</code>。</p><p translation-origin="off">Use the CLI to create the <code>MessageService</code> in <code>src/app</code>. </p>
+
+<code-example language="sh" class="code-shell" ng-version="6.0.0"><div style="display: none">
+  ng generate service message
+</div><!----><aio-code><pre class="prettyprint lang-sh">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">ng generate service message</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">打开 <code>MessageService</code>，并把它的内容改成这样：</p><p translation-origin="off">Open <code>MessageService</code> and replace its contents with the following.</p>
+
+<code-example title="/src/app/message.service.ts" path="toh-pt4/src/app/message.service.ts" ng-version="6.0.0"><div style="display: none">
+import { <a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a> } from '@angular/core';
+
+@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>({
+  providedIn: 'root',
+})
+export class MessageService {
+  messages: string[] = [];
+
+  add(message: string) {
+    this.messages.push(message);
+  }
+
+  clear() {
+    this.messages = [];
+  }
+}
+
+
+</div><!----><header class="ng-star-inserted">/src/app/message.service.ts</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from /src/app/message.service.ts">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><ol class="linenums"><li class="L0"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><a href="https://angular.cn/api/core/Injectable" class="code-anchor"><span class="typ">Injectable</span></a><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'@angular/core'</span><span class="pun">;</span></li><li class="L1"><span class="pln">&nbsp;</span></li><li class="L2"><span class="lit">@</span><a href="https://angular.cn/api/core/Injectable" class="code-anchor"><span class="lit">Injectable</span></a><span class="pun">({</span></li><li class="L3"><span class="pln">  providedIn</span><span class="pun">:</span><span class="pln"> </span><span class="str">'root'</span><span class="pun">,</span></li><li class="L4"><span class="pun">})</span></li><li class="L5"><span class="kwd">export</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">MessageService</span><span class="pln"> </span><span class="pun">{</span></li><li class="L6"><span class="pln">  messages</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">string</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[];</span></li><li class="L7"><span class="pln">&nbsp;</span></li><li class="L8"><span class="pln">  </span><span class="kwd">add</span><span class="pun">(</span><span class="pln">message</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">string</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L9"><span class="pln">    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">messages</span><span class="pun">.</span><span class="pln">push</span><span class="pun">(</span><span class="pln">message</span><span class="pun">);</span></li><li class="L0"><span class="pln">  </span><span class="pun">}</span></li><li class="L1"><span class="pln">&nbsp;</span></li><li class="L2"><span class="pln">  clear</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L3"><span class="pln">    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">messages </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[];</span></li><li class="L4"><span class="pln">  </span><span class="pun">}</span></li><li class="L5"><span class="pun">}</span></li></ol></code>
+    </pre></aio-code></code-example>
+<p translation-result="">该服务对外暴露了它的 <code>messages</code> 缓存，以及两个方法：<code>add()</code> 方法往缓存中添加一条消息，<code>clear()</code> 方法用于清空缓存。</p><p translation-origin="off">The service exposes its cache of <code>messages</code> and two methods: one to <code>add()</code> a message to the cache and another to <code>clear()</code> the cache.</p>
+
+<a id="inject-message-service"></a>
+<h3 translation-result="" id="inject-it-into-the-codeheroservicecode">把它注入到 <code>HeroService</code> 中<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#inject-it-into-the-codeheroservicecode"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="inject-it-into-the-heroservice">Inject it into the <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#inject-it-into-the-heroservice"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">重新打开 <code>HeroService</code>，并且导入 <code>MessageService</code>。</p><p translation-origin="off">Re-open the <code>HeroService</code> and import the <code>MessageService</code>.</p>
+
+<code-example title="/src/app/hero.service.ts (import MessageService)" path="toh-pt4/src/app/hero.service.ts" region="import-message-service" ng-version="6.0.0"><div style="display: none">
+import { MessageService } from './message.service';
+
+</div><!----><header class="ng-star-inserted">/src/app/hero.service.ts (import MessageService)</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from /src/app/hero.service.ts (import MessageService)">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">MessageService</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'./message.service'</span><span class="pun">;</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">修改这个构造函数，添加一个私有的 <code>messageService</code> 属性参数。
+Angular 将会在创建 <code>HeroService</code> 时把 <code>MessageService</code> 的单例注入到这个属性中。</p><p translation-origin="off">Modify the constructor with a parameter that declares a private <code>messageService</code> property.
+Angular will inject the singleton <code>MessageService</code> into that property
+when it creates the <code>HeroService</code>.</p>
+
+<code-example path="toh-pt4/src/app/hero.service.ts" region="ctor" ng-version="6.0.0"><div style="display: none">
+constructor(private messageService: MessageService) { }
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">constructor</span><span class="pun">(</span><span class="kwd">private</span><span class="pln"> messageService</span><span class="pun">:</span><span class="pln"> </span><span class="typ">MessageService</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<div class="l-sub-section">
+<p translation-result="">这是一个典型的“服务中的服务”场景：
+你把 <code>MessageService</code> 注入到了 <code>HeroService</code> 中，而 <code>HeroService</code> 又被注入到了 <code>HeroesComponent</code> 中。</p><p translation-origin="off">This is a typical "<em>service-in-service</em>" scenario:
+you inject the <code>MessageService</code> into the <code>HeroService</code> which is injected into the <code>HeroesComponent</code>.</p>
+
+</div>
+<h3 translation-result="" id="send-a-message-from-codeheroservicecode">从 <code>HeroService</code> 中发送一条消息<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#send-a-message-from-codeheroservicecode"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="send-a-message-from-heroservice">Send a message from <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#send-a-message-from-heroservice"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">修改 <code>getHeroes</code> 方法，在获取到英雄数组时发送一条消息。</p><p translation-origin="off">Modify the <code>getHeroes</code> method to send a message when the heroes are fetched.</p>
+
+<code-example path="toh-pt4/src/app/hero.service.ts" region="getHeroes" ng-version="6.0.0"><div style="display: none">
+getHeroes(): Observable&lt;Hero[]&gt; {
+  // TODO: send the message _after_ fetching the heroes
+  this.messageService.add('HeroService: fetched heroes');
+  return of(HEROES);
+}
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="pln">getHeroes</span><span class="pun">():</span><span class="pln"> </span><span class="typ">Observable</span><span class="pun">&lt;</span><span class="typ">Hero</span><span class="pun">[]&gt;</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="com">// TODO: send the message _after_ fetching the heroes</span><span class="pln">
+  </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">messageService</span><span class="pun">.</span><span class="kwd">add</span><span class="pun">(</span><span class="str">'HeroService: fetched heroes'</span><span class="pun">);</span><span class="pln">
+  </span><span class="kwd">return</span><span class="pln"> of</span><span class="pun">(</span><span class="pln">HEROES</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code>
+    </pre></aio-code></code-example>
+<h3 translation-result="" id="display-the-message-from-codeheroservicecode">从 <code>HeroService</code> 中显示消息<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#display-the-message-from-codeheroservicecode"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="display-the-message-from-heroservice">Display the message from <code>HeroService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#display-the-message-from-heroservice"><i class="material-icons">link</i></a></h3>
+
+<p translation-result=""><code>MessagesComponent</code> 可以显示所有消息，
+包括当 <code>HeroService</code> 获取到英雄数据时发送的那条。</p><p translation-origin="off">The <code>MessagesComponent</code> should display all messages,
+including the message sent by the <code>HeroService</code> when it fetches heroes.</p>
+
+<p translation-result="">打开 <code>MessagesComponent</code>，并且导入 <code>MessageService</code>。</p><p translation-origin="off">Open <code>MessagesComponent</code> and import the <code>MessageService</code>.</p>
+
+<code-example title="/src/app/messages/messages.component.ts (import MessageService)" path="toh-pt4/src/app/messages/messages.component.ts" region="import-message-service" ng-version="6.0.0"><div style="display: none">
+import { MessageService } from '../message.service';
+
+</div><!----><header class="ng-star-inserted">/src/app/messages/messages.component.ts (import MessageService)</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from /src/app/messages/messages.component.ts (import MessageService)">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">MessageService</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'../message.service'</span><span class="pun">;</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">修改构造函数，添加一个 <strong>public</strong> 的 <code>messageService</code> 属性。
+Angular 将会在创建 <code>MessagesComponent</code> 的实例时 把 <code>MessageService</code> 的实例注入到这个属性中。</p><p translation-origin="off">Modify the constructor with a parameter that declares a <strong>public</strong> <code>messageService</code> property.
+Angular will inject the singleton <code>MessageService</code> into that property
+when it creates the <code>MessagesComponent</code>.</p>
+
+<code-example path="toh-pt4/src/app/messages/messages.component.ts" region="ctor" ng-version="6.0.0"><div style="display: none">
+constructor(public messageService: MessageService) {}
+
+</div><!----><aio-code><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="kwd">constructor</span><span class="pun">(</span><span class="kwd">public</span><span class="pln"> messageService</span><span class="pun">:</span><span class="pln"> </span><span class="typ">MessageService</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{}</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">这个 <code>messageService</code> 属性必须是公共属性，因为你将会在模板中绑定到它。</p><p translation-origin="off">The <code>messageService</code> property <strong>must be public</strong> because you're about to bind to it in the template.</p>
+
+<div class="alert is-important">
+<p translation-result="">Angular 只会绑定到组件的<em>公共</em>属性。</p><p translation-origin="off">Angular only binds to <em>public</em> component properties.</p>
+
+</div>
+<h3 translation-result="" id="bind-to-the-emmessageserviceem">绑定到 <code>MessageService</code><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#bind-to-the-emmessageserviceem"><i class="material-icons">link</i></a></h3><h3 translation-origin="off" id="bind-to-the-messageservice">Bind to the <em>MessageService</em><a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#bind-to-the-messageservice"><i class="material-icons">link</i></a></h3>
+
+<p translation-result="">把 CLI 生成的 <code>MessagesComponent</code> 的模板改成这样：</p><p translation-origin="off">Replace the CLI-generated <code>MessagesComponent</code> template with the following.</p>
+
+<code-example title="src/app/messages/messages.component.html" path="toh-pt4/src/app/messages/messages.component.html" ng-version="6.0.0"><div style="display: none">
+&lt;div *<a href="https://angular.cn/api/common/NgIf" class="code-anchor">ngIf</a>="messageService.messages.length"&gt;
+
+  &lt;h2&gt;Messages&lt;/h2&gt;
+  &lt;button class="clear"
+          (click)="messageService.clear()"&gt;clear&lt;/button&gt;
+  &lt;div *<a href="https://angular.cn/api/common/NgForOf" class="code-anchor">ngFor</a>='let message of messageService.messages'&gt; {{message}} &lt;/div&gt;
+
+&lt;/div&gt;
+
+
+</div><!----><header class="ng-star-inserted">src/app/messages/messages.component.html</header><aio-code class="headed-code"><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from src/app/messages/messages.component.html">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><span class="tag">&lt;div</span><span class="pln"> *</span><a href="https://angular.cn/api/common/NgIf" class="code-anchor"><span class="atn">ngIf</span></a><span class="pun">=</span><span class="atv">"messageService.messages.length"</span><span class="tag">&gt;</span><span class="pln">
+
+  </span><span class="tag">&lt;h2&gt;</span><span class="pln">Messages</span><span class="tag">&lt;/h2&gt;</span><span class="pln">
+  </span><span class="tag">&lt;button</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"clear"</span><span class="pln">
+          (</span><span class="atn">click</span><span class="pln">)</span><span class="pun">=</span><span class="atv">"messageService.clear()"</span><span class="tag">&gt;</span><span class="pln">clear</span><span class="tag">&lt;/button&gt;</span><span class="pln">
+  </span><span class="tag">&lt;div</span><span class="pln"> *</span><a href="https://angular.cn/api/common/NgForOf" class="code-anchor"><span class="atn">ngFor</span></a><span class="pun">=</span><span class="atv">'let message of messageService.messages'</span><span class="tag">&gt;</span><span class="pln"> {{message}} </span><span class="tag">&lt;/div&gt;</span><span class="pln">
+
+</span><span class="tag">&lt;/div&gt;</span></code>
+    </pre></aio-code></code-example>
+<p translation-result="">这个模板直接绑定到了组件的 <code>messageService</code> 属性上。</p><p translation-origin="off">This template binds directly to the component's <code>messageService</code>.</p>
+
+<ul>
+<li>
+<p translation-result=""> <code>*<a href="https://angular.cn/api/common/NgIf" class="code-anchor">ngIf</a></code> 只有当在有消息时才会显示消息区。</p><p translation-origin="off">The <code>*<a href="https://angular.cn/api/common/NgIf" class="code-anchor">ngIf</a></code> only displays the messages area if there are messages to show.</p>
+
+</li>
+<li>
+<p translation-result=""> <code>*<a href="https://angular.cn/api/common/NgForOf" class="code-anchor">ngFor</a></code> 用来在一系列 <code>&lt;div&gt;</code> 元素中展示消息列表。</p><p translation-origin="off">An <code>*<a href="https://angular.cn/api/common/NgForOf" class="code-anchor">ngFor</a></code> presents the list of messages in repeated <code>&lt;div&gt;</code> elements.</p>
+
+</li>
+<li>
+<p translation-result="">   Angular 的<a href="https://angular.cn/guide/template-syntax#event-binding">事件绑定</a>把按钮的 <code>click</code> 事件绑定到了 <code>MessageService.clear()</code>。</p><p translation-origin="off">An Angular <a href="https://angular.cn/guide/template-syntax#event-binding">event binding</a> binds the button's click event
+to <code>MessageService.clear()</code>.</p>
+
+</li>
+</ul>
+<p translation-result="">当你把 <a href="https://angular.cn/tutorial/toh-pt4#final-code-review">最终代码</a> 某一页的内容添加到 <code>messages.component.css</code> 中时，这些消息会变得好看一些。</p><p translation-origin="off">The messages will look better when you add the private CSS styles to <code>messages.component.css</code>
+as listed in one of the <a href="https://angular.cn/tutorial/toh-pt4#final-code-review">"final code review"</a> tabs below.</p>
+
+<p translation-result="">刷新浏览器，页面显示出了英雄列表。
+滚动到底部，就会在消息区看到来自 <code>HeroService</code> 的消息。
+点击“清空”按钮，消息区不见了。</p><p translation-origin="off">The browser refreshes and the page displays the list of heroes.
+Scroll to the bottom to see the message from the <code>HeroService</code> in the message area.
+Click the "clear" button and the message area disappears.</p>
+
+<a id="final-code-review"></a>
+<h2 translation-result="" id="final-code-review-4">查看最终代码<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#final-code-review-4"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="final-code-review">Final code review<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#final-code-review"><i class="material-icons">link</i></a></h2>
+
+<p translation-result="">你的应用应该变成了这样 <live-example ng-version="6.0.0"><span><!----><!----><!----><!----><span class="ng-star-inserted"><a target="_blank" href="https://angular.cn/generated/live-examples/toh-pt4/stackblitz.html" title="在线例子">在线例子</a><!----><span class="ng-star-inserted"> / <a download="" title="下载范例" href="https://angular.cn/generated/zips/toh-pt4/toh-pt4.zip">下载范例</a></span></span></span></live-example>。本页所提及的代码文件如下：</p><p translation-origin="off">Here are the code files discussed on this page and your app should look like this <live-example ng-version="6.0.0"><span><!----><!----><!----><!----><span class="ng-star-inserted"><a target="_blank" href="https://angular.cn/generated/live-examples/toh-pt4/stackblitz.html" title="在线例子">在线例子</a><!----><span class="ng-star-inserted"> / <a download="" title="下载范例" href="https://angular.cn/generated/zips/toh-pt4/toh-pt4.zip">下载范例</a></span></span></span></live-example>.</p>
+
+<code-tabs ng-version="6.0.0"><div style="display: none">
+
+  <code-pane title="src/app/hero.service.ts" path="toh-pt4/src/app/hero.service.ts">
+import { <a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a> } from '@angular/core';
+
+import { Observable, of } from 'rxjs';
+
+import { Hero } from './hero';
+import { HEROES } from './mock-heroes';
+import { MessageService } from './message.service';
+
+@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>({
+  providedIn: 'root',
+})
+export class HeroService {
+
+  constructor(private messageService: MessageService) { }
+
+  getHeroes(): Observable&lt;Hero[]&gt; {
+    // TODO: send the message _after_ fetching the heroes
+    this.messageService.add('HeroService: fetched heroes');
+    return of(HEROES);
+  }
+}
+
+</code-pane>
+
+  <code-pane title="src/app/message.service.ts" path="toh-pt4/src/app/message.service.ts">
+import { <a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a> } from '@angular/core';
+
+@<a href="https://angular.cn/api/core/Injectable" class="code-anchor">Injectable</a>({
+  providedIn: 'root',
+})
+export class MessageService {
+  messages: string[] = [];
+
+  add(message: string) {
+    this.messages.push(message);
+  }
+
+  clear() {
+    this.messages = [];
+  }
+}
+
+
+</code-pane>
+
+  <code-pane title="src/app/heroes/heroes.component.ts" path="toh-pt4/src/app/heroes/heroes.component.ts">
+import { <a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a>, <a href="https://angular.cn/api/core/OnInit" class="code-anchor">OnInit</a> } from '@angular/core';
+
+import { Hero } from '../hero';
+import { HeroService } from '../hero.service';
+
+@<a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a>({
+  selector: 'app-heroes',
+  templateUrl: './heroes.component.html',
+  styleUrls: ['./heroes.component.css']
+})
+export class HeroesComponent implements <a href="https://angular.cn/api/core/OnInit" class="code-anchor">OnInit</a> {
+
+  selectedHero: Hero;
+
+  heroes: Hero[];
+
+  constructor(private heroService: HeroService) { }
+
+  ngOnInit() {
+    this.getHeroes();
+  }
+
+  onSelect(hero: Hero): void {
+    this.selectedHero = hero;
+  }
+
+  getHeroes(): void {
+    this.heroService.getHeroes()
+        .subscribe(heroes =&gt; this.heroes = heroes);
+  }
+}
+
+
+</code-pane>
+
+  <code-pane title="src/app/messages/messages.component.ts" path="toh-pt4/src/app/messages/messages.component.ts">
+import { <a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a>, <a href="https://angular.cn/api/core/OnInit" class="code-anchor">OnInit</a> } from '@angular/core';
+import { MessageService } from '../message.service';
+
+@<a href="https://angular.cn/api/core/Component" class="code-anchor">Component</a>({
+  selector: 'app-messages',
+  templateUrl: './messages.component.html',
+  styleUrls: ['./messages.component.css']
+})
+export class MessagesComponent implements <a href="https://angular.cn/api/core/OnInit" class="code-anchor">OnInit</a> {
+
+  constructor(public messageService: MessageService) {}
+
+  ngOnInit() {
+  }
+
+}
+
+
+</code-pane>
+
+  <code-pane title="src/app/messages/messages.component.html" path="toh-pt4/src/app/messages/messages.component.html">
+&lt;div *<a href="https://angular.cn/api/common/NgIf" class="code-anchor">ngIf</a>="messageService.messages.length"&gt;
+
+  &lt;h2&gt;Messages&lt;/h2&gt;
+  &lt;button class="clear"
+          (click)="messageService.clear()"&gt;clear&lt;/button&gt;
+  &lt;div *<a href="https://angular.cn/api/common/NgForOf" class="code-anchor">ngFor</a>='let message of messageService.messages'&gt; {{message}} &lt;/div&gt;
+
+&lt;/div&gt;
+
+
+</code-pane>
+
+  <code-pane title="src/app/messages/messages.component.css" path="toh-pt4/src/app/messages/messages.component.css">
+/* MessagesComponent's private CSS styles */
+h2 {
+  color: red;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+}
+body {
+  margin: 2em;
+}
+body, input[text], button {
+  color: crimson;
+  font-family: Cambria, Georgia;
+}
+
+button.clear {
+  font-family: Arial;
+  background-color: #eee;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  cursor: hand;
+}
+button:hover {
+  background-color: #cfd8dc;
+}
+button:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: auto;
+}
+button.clear {
+  color: #888;
+  margin-bottom: 12px;
+}
+
+
+</code-pane>
+
+  <code-pane title="src/app/app.module.ts" path="toh-pt4/src/app/app.module.ts">
+import { <a href="https://angular.cn/api/platform-browser/BrowserModule" class="code-anchor">BrowserModule</a> } from '@angular/platform-browser';
+import { <a href="https://angular.cn/api/core/NgModule" class="code-anchor">NgModule</a> } from '@angular/core';
+import { <a href="https://angular.cn/api/forms/FormsModule" class="code-anchor">FormsModule</a> } from '@angular/forms';
+import { AppComponent } from './app.component';
+import { HeroesComponent } from './heroes/heroes.component';
+import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+import { MessagesComponent } from './messages/messages.component';
+
+@<a href="https://angular.cn/api/core/NgModule" class="code-anchor">NgModule</a>({
+  declarations: [
+    AppComponent,
+    HeroesComponent,
+    HeroDetailComponent,
+    MessagesComponent
+  ],
+  imports: [
+    <a href="https://angular.cn/api/platform-browser/BrowserModule" class="code-anchor">BrowserModule</a>,
+    <a href="https://angular.cn/api/forms/FormsModule" class="code-anchor">FormsModule</a>
+  ],
+  providers: [
+    // no need to place any providers due to the `providedIn` flag...
+  ],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule { }
+
+
+</code-pane>
+
+  <code-pane title="src/app/app.component.html" path="toh-pt4/src/app/app.component.html">
+&lt;h1&gt;{{title}}&lt;/h1&gt;
+&lt;app-heroes&gt;&lt;/app-heroes&gt;
+&lt;app-messages&gt;&lt;/app-messages&gt;
+
+
+</code-pane>
+
+</div><mat-tab-group class="code-tab-group mat-tab-group mat-primary" disableripple=""><mat-tab-header class="mat-tab-header mat-tab-header-pagination-controls-enabled"><div aria-hidden="true" class="mat-tab-header-pagination mat-tab-header-pagination-before mat-elevation-z4 mat-ripple mat-tab-header-pagination-disabled" mat-ripple=""><div class="mat-tab-header-pagination-chevron"></div></div><div class="mat-tab-label-container"><div class="mat-tab-list" role="tablist" style="transform: translate3d(0px, 0px, 0px);"><div class="mat-tab-labels"><!----><div class="mat-tab-label mat-ripple mat-tab-label-active ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-0" tabindex="0" aria-controls="mat-tab-content-5-0" aria-selected="true"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/hero.service.ts</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-1" tabindex="-1" aria-controls="mat-tab-content-5-1" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/message.service.ts</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-2" tabindex="-1" aria-controls="mat-tab-content-5-2" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/heroes/heroes.component.ts</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-3" tabindex="-1" aria-controls="mat-tab-content-5-3" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/messages/messages.component.ts</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-4" tabindex="-1" aria-controls="mat-tab-content-5-4" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/messages/messages.component.html</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-5" tabindex="-1" aria-controls="mat-tab-content-5-5" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/messages/messages.component.css</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-6" tabindex="-1" aria-controls="mat-tab-content-5-6" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/app.module.ts</span><!----><!----></div></div><div class="mat-tab-label mat-ripple ng-star-inserted" mat-ripple="" mattablabelwrapper="" role="tab" id="mat-tab-label-5-7" tabindex="-1" aria-controls="mat-tab-content-5-7" aria-selected="false"><div class="mat-tab-label-content"><!----><!----><span class="ng-star-inserted">src/app/app.component.html</span><!----><!----></div></div></div><mat-ink-bar class="mat-ink-bar" style="visibility: visible; left: 0px; width: 193px;"></mat-ink-bar></div></div><div aria-hidden="true" class="mat-tab-header-pagination mat-tab-header-pagination-after mat-elevation-z4 mat-ripple" mat-ripple=""><div class="mat-tab-header-pagination-chevron"></div></div></mat-tab-header><div class="mat-tab-body-wrapper"><!----><mat-tab-body class="mat-tab-body ng-tns-c10-19 mat-tab-body-active ng-star-inserted" role="tabpanel" id="mat-tab-content-5-0" aria-labelledby="mat-tab-label-5-0"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: none;"><!----><!----><aio-code class="ng-star-inserted" style=""><pre class="prettyprint lang-">      <!----><button class="material-icons copy-button no-print ng-star-inserted" title="Copy code snippet" aria-label="Copy code snippet from src/app/hero.service.ts">
+        <span aria-hidden="true">content_copy</span>
+      </button>
+      <code class="animated fadeIn"><ol class="linenums"><li class="L0"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><a href="https://angular.cn/api/core/Injectable" class="code-anchor"><span class="typ">Injectable</span></a><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'@angular/core'</span><span class="pun">;</span></li><li class="L1"><span class="pln">&nbsp;</span></li><li class="L2"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">Observable</span><span class="pun">,</span><span class="pln"> of </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'rxjs'</span><span class="pun">;</span></li><li class="L3"><span class="pln">&nbsp;</span></li><li class="L4"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">Hero</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'./hero'</span><span class="pun">;</span></li><li class="L5"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> HEROES </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'./mock-heroes'</span><span class="pun">;</span></li><li class="L6"><span class="kwd">import</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="typ">MessageService</span><span class="pln"> </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">from</span><span class="pln"> </span><span class="str">'./message.service'</span><span class="pun">;</span></li><li class="L7"><span class="pln">&nbsp;</span></li><li class="L8"><span class="lit">@</span><a href="https://angular.cn/api/core/Injectable" class="code-anchor"><span class="lit">Injectable</span></a><span class="pun">({</span></li><li class="L9"><span class="pln">  providedIn</span><span class="pun">:</span><span class="pln"> </span><span class="str">'root'</span><span class="pun">,</span></li><li class="L0"><span class="pun">})</span></li><li class="L1"><span class="kwd">export</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">HeroService</span><span class="pln"> </span><span class="pun">{</span></li><li class="L2"><span class="pln">&nbsp;</span></li><li class="L3"><span class="pln">  </span><span class="kwd">constructor</span><span class="pun">(</span><span class="kwd">private</span><span class="pln"> messageService</span><span class="pun">:</span><span class="pln"> </span><span class="typ">MessageService</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="pun">}</span></li><li class="L4"><span class="pln">&nbsp;</span></li><li class="L5"><span class="pln">  getHeroes</span><span class="pun">():</span><span class="pln"> </span><span class="typ">Observable</span><span class="pun">&lt;</span><span class="typ">Hero</span><span class="pun">[]&gt;</span><span class="pln"> </span><span class="pun">{</span></li><li class="L6"><span class="pln">    </span><span class="com">// TODO: send the message _after_ fetching the heroes</span></li><li class="L7"><span class="pln">    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">messageService</span><span class="pun">.</span><span class="kwd">add</span><span class="pun">(</span><span class="str">'HeroService: fetched heroes'</span><span class="pun">);</span></li><li class="L8"><span class="pln">    </span><span class="kwd">return</span><span class="pln"> of</span><span class="pun">(</span><span class="pln">HEROES</span><span class="pun">);</span></li><li class="L9"><span class="pln">  </span><span class="pun">}</span></li><li class="L0"><span class="pun">}</span></li></ol></code>
+    </pre></aio-code><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-20 ng-star-inserted" role="tabpanel" id="mat-tab-content-5-1" aria-labelledby="mat-tab-label-5-1"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-21 ng-star-inserted" role="tabpanel" id="mat-tab-content-5-2" aria-labelledby="mat-tab-label-5-2"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-22 ng-star-inserted" role="tabpanel" id="mat-tab-content-5-3" aria-labelledby="mat-tab-label-5-3"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-23 ng-star-inserted" role="tabpanel" id="mat-tab-content-5-4" aria-labelledby="mat-tab-label-5-4"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-24 ng-star-inserted" role="tabpanel" id="mat-tab-content-5-5" aria-labelledby="mat-tab-label-5-5"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-25 ng-star-inserted" role="tabpanel" id="mat-tab-content-5-6" aria-labelledby="mat-tab-label-5-6"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body><mat-tab-body class="mat-tab-body ng-tns-c10-26 ng-star-inserted" role="tabpanel" id="mat-tab-content-5-7" aria-labelledby="mat-tab-label-5-7"><div class="mat-tab-body-content ng-trigger ng-trigger-translateTab" style="transform: translate3d(100%, 0px, 0px);"><!----></div></mat-tab-body></div></mat-tab-group></code-tabs>
+<h2 translation-result="" id="summary-14">小结<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#summary-14"><i class="material-icons">link</i></a></h2><h2 translation-origin="off" id="summary">Summary<a title="Link to this heading" class="header-link" aria-hidden="true" href="https://angular.cn/tutorial/toh-pt4#summary"><i class="material-icons">link</i></a></h2>
+
+<ul>
+<li>
+<p translation-result=""> 你把数据访问逻辑重构到了 <code>HeroService</code> 类中。</p><p translation-origin="off">You refactored data access to the <code>HeroService</code> class.</p>
+
+</li>
+<li>
+<p translation-result=""> 你在根注入器中把 <code>HeroService</code> 注册为该服务的提供商，以便在别处可以注入它。</p><p translation-origin="off">You registered the <code>HeroService</code> as the <em>provider</em> of its service at the root level so that it can be injected anywhere in the app.</p>
+
+</li>
+<li>
+<p translation-result=""> 你使用 <a href="https://angular.cn/guide/dependency-injection">Angular 依赖注入</a>机制把它注入到了组件中。</p><p translation-origin="off">You used <a href="https://angular.cn/guide/dependency-injection">Angular Dependency Injection</a> to inject it into a component.</p>
+
+</li>
+<li>
+<p translation-result=""> 你给 <code>HeroService</code> 中获取数据的方法提供了一个异步的函数签名。</p><p translation-origin="off">You gave the <code>HeroService</code> <em>get data</em> method an asynchronous signature.</p>
+
+</li>
+<li>
+<p translation-result=""> 你发现了 <code>Observable</code> 以及 RxJS 库。</p><p translation-origin="off">You discovered <code>Observable</code> and the RxJS <em>Observable</em> library.</p>
+
+</li>
+<li>
+<p translation-result=""> 你使用 RxJS 的 <code>of()</code> 方法返回了一个模拟英雄数据的<em>可观察对象</em> (<code>Observable&lt;Hero[]&gt;</code>)。</p><p translation-origin="off">You used RxJS <code>of()</code> to return an observable of mock heroes (<code>Observable&lt;Hero[]&gt;</code>).</p>
+
+</li>
+<li>
+<p translation-result=""> 在组件的 <code>ngOnInit</code> 生命周期钩子中调用 <code>HeroService</code> 方法，而不是构造函数中。</p><p translation-origin="off">The component's <code>ngOnInit</code> lifecycle hook calls the <code>HeroService</code> method, not the constructor.</p>
+
+</li>
+<li>
+<p translation-result=""> 你创建了一个 <code>MessageService</code>，以便在类之间实现松耦合通讯。</p><p translation-origin="off">You created a <code>MessageService</code> for loosely-coupled communication between classes.</p>
+
+</li>
+<li>
+<p translation-result="">  <code>HeroService</code> 连同注入到它的服务 <code>MessageService</code> 一起，注入到了组件中。</p><p translation-origin="off">The <code>HeroService</code> injected into a component is created with another injected service,
+<code>MessageService</code>.</p>
+
+</li>
+</ul>
+
+</div>
+<!-- links to this doc:
+ - guide/lifecycle-hooks
+ - guide/reactive-forms
+ - guide/router
+ - guide/singleton-services
+ - tutorial/toh-pt5
+-->
+<!-- links from this doc:
+ - api/common/NgForOf
+ - api/common/NgIf
+ - api/common/http/HttpClient
+ - api/core/Component
+ - api/core/Injectable
+ - api/core/NgModule
+ - api/core/OnInit
+ - api/forms/FormsModule
+ - api/platform-browser/BrowserModule
+ - guide/dependency-injection
+ - guide/http
+ - guide/lifecycle-hooks
+ - guide/template-syntax#event-binding
+ - tutorial/toh-pt4#add-emgetheroesem
+ - tutorial/toh-pt4#add-getheroes
+ - tutorial/toh-pt4#bind-to-the-emmessageserviceem
+ - tutorial/toh-pt4#bind-to-the-messageservice
+ - tutorial/toh-pt4#call-it-in-codengoninitcode
+ - tutorial/toh-pt4#call-it-in-ngoninit
+ - tutorial/toh-pt4#create-emmessagescomponentem
+ - tutorial/toh-pt4#create-messagescomponent
+ - tutorial/toh-pt4#create-the-emheroserviceem
+ - tutorial/toh-pt4#create-the-emmessageserviceem
+ - tutorial/toh-pt4#create-the-heroservice
+ - tutorial/toh-pt4#create-the-messageservice
+ - tutorial/toh-pt4#display-the-message-from-codeheroservicecode
+ - tutorial/toh-pt4#display-the-message-from-heroservice
+ - tutorial/toh-pt4#eminjectableem-services
+ - tutorial/toh-pt4#final-code-review
+ - tutorial/toh-pt4#final-code-review-4
+ - tutorial/toh-pt4#get-hero-data
+ - tutorial/toh-pt4#inject
+ - tutorial/toh-pt4#inject-it-into-the-codeheroservicecode
+ - tutorial/toh-pt4#inject-it-into-the-heroservice
+ - tutorial/toh-pt4#inject-message-service
+ - tutorial/toh-pt4#inject-the-codeheroservicecode
+ - tutorial/toh-pt4#inject-the-heroservice
+ - tutorial/toh-pt4#injectable-services
+ - tutorial/toh-pt4#observable-data
+ - tutorial/toh-pt4#observable-emheroserviceem
+ - tutorial/toh-pt4#observable-heroservice
+ - tutorial/toh-pt4#provide-the-codeheroservicecode
+ - tutorial/toh-pt4#provide-the-heroservice
+ - tutorial/toh-pt4#see-it-run
+ - tutorial/toh-pt4#send-a-message-from-codeheroservicecode
+ - tutorial/toh-pt4#send-a-message-from-heroservice
+ - tutorial/toh-pt4#services
+ - tutorial/toh-pt4#services-1
+ - tutorial/toh-pt4#show-messages
+ - tutorial/toh-pt4#subscribe-in-emheroescomponentem
+ - tutorial/toh-pt4#subscribe-in-heroescomponent
+ - tutorial/toh-pt4#summary
+ - tutorial/toh-pt4#summary-14
+ - tutorial/toh-pt4#update-codeheroescomponentcode
+ - tutorial/toh-pt4#update-heroescomponent
+ - tutorial/toh-pt4#why-services
+ - tutorial/toh-pt6
+ - http://reactivex.io/rxjs/
+--></div></aio-doc-viewer><aio-dt><!----></aio-dt></section></mat-sidenav-content></mat-sidenav-container><!----><div class="toc-container no-print ng-star-inserted" style="max-height: 3052px;"><aio-toc><!----><div class="toc-inner no-print collapsed ng-star-inserted"><!----><!----><ul class="toc-list"><!----><!----><!----><li title="服务link" class="h1 active ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#services-1">服务</a></li><!----><!----><!----><li title="为什么需要服务link" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#why-services">为什么需要服务</a></li><!----><!----><!----><li title="创建 HeroServicelink" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#create-the-emheroserviceem">创建 <code>HeroService</code></a></li><!----><!----><!----><li title="@Injectable() 服务link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#eminjectableem-services"><em>@Injectable()</em> 服务</a></li><!----><!----><!----><li title="获取英雄数据link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#get-hero-data">获取英雄数据</a></li><!----><!----><!----><li title="提供（provide） HeroServicelink" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#provide-the-codeheroservicecode">提供（provide） <code>HeroService</code></a></li><!----><!----><!----><li title="修改 HeroesComponentlink" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#update-codeheroescomponentcode">修改 <code>HeroesComponent</code></a></li><!----><!----><!----><li title="注入 HeroServicelink" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#inject-the-codeheroservicecode">注入 <code>HeroService</code></a></li><!----><!----><!----><li title="添加 getHeroes()link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#add-emgetheroesem">添加 <em>getHeroes()</em></a></li><!----><!----><!----><li title="在 ngOnInit 中调用它link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#call-it-in-codengoninitcode">在 <code>ngOnInit</code> 中调用它</a></li><!----><!----><!----><li title="查看运行效果link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#see-it-run">查看运行效果</a></li><!----><!----><!----><li title="可观察（Observable）的数据link" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#observable-data">可观察（Observable）的数据</a></li><!----><!----><!----><li title="可观察对象版本的 HeroServicelink" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#observable-emheroserviceem">可观察对象版本的 <code>HeroService</code></a></li><!----><!----><!----><li title="在 HeroesComponent 中订阅link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#subscribe-in-emheroescomponentem">在 <code>HeroesComponent</code> 中订阅</a></li><!----><!----><!----><li title="显示消息link" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#show-messages">显示消息</a></li><!----><!----><!----><li title="创建 MessagesComponentlink" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#create-emmessagescomponentem">创建 <code>MessagesComponent</code></a></li><!----><!----><!----><li title="创建 MessageServicelink" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#create-the-emmessageserviceem">创建 <code>MessageService</code></a></li><!----><!----><!----><li title="把它注入到 HeroService 中link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#inject-it-into-the-codeheroservicecode">把它注入到 <code>HeroService</code> 中</a></li><!----><!----><!----><li title="从 HeroService 中发送一条消息link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#send-a-message-from-codeheroservicecode">从 <code>HeroService</code> 中发送一条消息</a></li><!----><!----><!----><li title="从 HeroService 中显示消息link" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#display-the-message-from-codeheroservicecode">从 <code>HeroService</code> 中显示消息</a></li><!----><!----><!----><li title="绑定到 MessageServicelink" class="h3 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#bind-to-the-emmessageserviceem">绑定到 <code>MessageService</code></a></li><!----><!----><!----><li title="查看最终代码link" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#final-code-review-4">查看最终代码</a></li><!----><!----><!----><li title="小结link" class="h2 ng-star-inserted"><a href="https://angular.cn/tutorial/toh-pt4#summary-14">小结</a></li><!----></ul><!----></div></aio-toc></div><footer class="no-print"><aio-footer><div class="grid-fluid"><!----><div class="footer-block ng-star-inserted"><h3>资源</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://angular.cn/about" title="Angular 贡献者。">关于</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.cn/resources" title="网络上的 Angular 工具、培训、博客等">资源列表</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.cn/presskit" title="我们的联系方式、LOGO 和品牌">宣传资料</a></li><li class="ng-star-inserted"><a class="link" href="https://blog.angular.io/" title="Angular 官方博客">博客</a></li></ul></div><div class="footer-block ng-star-inserted"><h3>帮助</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://stackoverflow.com/questions/tagged/angular" title="Stack Overflow: 这里的社区会回答你关于 Angular 的技术问题">Stack Overflow</a></li><li class="ng-star-inserted"><a class="link" href="https://gitter.im/angular/angular" title="和老鸟聊 Angular">Gitter</a></li><li class="ng-star-inserted"><a class="link" href="https://github.com/angular/angular/issues" title="在 github 上报告问题和建议。">报告问题</a></li><li class="ng-star-inserted"><a class="link" href="https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md" title="让我们彼此尊重">行为规范</a></li></ul></div><div class="footer-block ng-star-inserted"><h3>社区</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://angular.cn/events" title="Post issues and suggestions on github.">活动</a></li><li class="ng-star-inserted"><a class="link" href="http://www.meetup.com/topics/angularjs/" title="参加聚会，向别的开发人员学习">聚会</a></li><li class="ng-star-inserted"><a class="link" href="https://twitter.com/angular" title="Twitter">Twitter</a></li><li class="ng-star-inserted"><a class="link" href="https://github.com/angular/angular" title="GitHub">GitHub</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.cn/contribute" title="向 Angular 做贡献">做贡献</a></li></ul></div><div class="footer-block ng-star-inserted"><h3>多语言</h3><ul><!----><li class="ng-star-inserted"><a class="link" href="https://angular.io/" title="English Version.">English Version</a></li><li class="ng-star-inserted"><a class="link" href="https://angular.jp/" title="日本語版">日本語版</a></li></ul></div></div><p> Powered by Google ©2010-2018. 代码授权方式：<a href="https://angular.cn/license" title="License text">MIT-style License</a>. 文档授权方式：<a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. </p><p><span class="text-caption">本网站由第三方公司洛阳永欣维护 &nbsp;<a href="http://www.miitbeian.gov.cn/">豫ICP备16019859号-1</a></span></p><p> 当前版本：6.0.1-build.180+sha.8494cf4. </p></aio-footer></footer></aio-shell>
+
+  <noscript>
+    &lt;div class="background-sky hero"&gt;&lt;/div&gt;
+    &lt;section id="intro"&gt;
+      &lt;div class="hero-logo"&gt;
+        &lt;img src="assets/images/logos/angular/angular.svg" width="250" height="250"&gt;
+      &lt;/div&gt;
+      &lt;div class="homepage-container"&gt;
+        &lt;div class="hero-headline"&gt;一套框架，多种平台&lt;br&gt;移动 &amp;amp; 桌面&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+    &lt;h2 style="color: red; text-align: center; margin-top: -50px;"&gt;
+      &lt;b&gt;&lt;i&gt;该网站需要浏览器支持 JavaScript &lt;/i&gt;&lt;/b&gt;
+    &lt;/h2&gt;
+  </noscript>
+
+
+<script type="text/javascript" src="./Angular - 服务_files/runtime.e7e60529879ffb07e28e.js.下载"></script><script type="text/javascript" src="./Angular - 服务_files/polyfills.56dafdd128abda80a86c.js.下载"></script><script type="text/javascript" src="./Angular - 服务_files/main.e580488e21fdad9d749c.js.下载"></script><div class="cdk-visually-hidden" aria-atomic="true" aria-live="polite"></div></body></html>
